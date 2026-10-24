@@ -67,7 +67,7 @@ def validate_file(file_data: bytes, file_name: str) -> Tuple[bool, str, Optional
 #######################
 
 #Helper for extracting hyperlinks 
-def extract_pdf_hyperlinks(file_data: bytes) -> str:
+def _extract_pdf_hyperlinks(file_data: bytes) -> str:
     urls = []
     try: 
         reader = PyPDF2.PdfReader(io.BytesIO(file_data))
@@ -96,7 +96,7 @@ def extract_pdf_hyperlinks(file_data: bytes) -> str:
     return "/n".join(urls)
 
 #Extracting PDF with PDFPlumber (main function)
-def extract_pdf_with_pdfplumber(file_data: bytes) -> str: 
+def _extract_pdf_with_pdfplumber(file_data: bytes) -> str: 
     text =""
     #Extracting text from each page 
     with pdfplumber.open(io.BytesIO(file_data)) as pdf: 
@@ -113,7 +113,7 @@ def extract_pdf_with_pdfplumber(file_data: bytes) -> str:
         )
 
     #get any hyperlinks
-    hyperlinks= extract_pdf_hyperlinks(file_data)
+    hyperlinks= _extract_pdf_hyperlinks(file_data)
 
     #if any hyperlinks in resume then add it to the text extracted
     if hyperlinks:
@@ -123,7 +123,7 @@ def extract_pdf_with_pdfplumber(file_data: bytes) -> str:
     return text.strip()
 
 #Extarcting pdf with PyPDF2 (fallback function)
-def extract_pdf_with_pypdf2(file_data: bytes) -> str:
+def _extract_pdf_with_pypdf2(file_data: bytes) -> str:
     text = ""
     #Extracting data from each page 
     pdf_reader = PyPDF2.PdfReader(io.BytesIO(file_data))
@@ -140,7 +140,7 @@ def extract_pdf_with_pypdf2(file_data: bytes) -> str:
         )
     
     #get any hyperlinks
-    hyperlinks = extract_pdf_hyperlinks(file_data)
+    hyperlinks = _extract_pdf_hyperlinks(file_data)
     #if any hyperlinks in resume then add it to the text extracted
     if hyperlinks:
             text = text.strip() + "/n" + hyperlinks
@@ -152,8 +152,8 @@ def extract_pdf_with_pypdf2(file_data: bytes) -> str:
 def extract_text_from_pdf(file_data:bytes) -> str:
     try:   
         result, used_fallback = with_fallback (
-            extract_pdf_with_pdfplumber,
-            extract_pdf_with_pypdf2,
+            _extract_pdf_with_pdfplumber,
+            _extract_pdf_with_pypdf2,
             file_data,
             log_fallback=True
         )
@@ -260,7 +260,7 @@ def extract_text(file_data: bytes, file_type: str) -> str:
 #####################
 #   Main Function   #
 #####################
-
+#Parsing resume file workflow 
 def parse_resume_file(file_data: bytes, file_name: str) -> Tuple[str, dict]:
     #Log that parsing has started
     log_info(f"Parsing file: {file_name}", context="parse_resume_file")
