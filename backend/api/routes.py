@@ -13,6 +13,7 @@ from backend.utils.file_utils import (
     get_default_location_results,
     get_default_skill_validation_results,
 )
+from backend.api.auth import get_current_user
 
 logger = logging.getLogger("ats_resume_scorer")
 
@@ -25,8 +26,7 @@ def _clean(text:str) -> str:
         text = text.lstrip(prefix)
     return text.strip()
 
-async def get_current_user():
-    return "test_user"
+
 
 ############################# 
 # Overview of All Endpoints #
@@ -55,7 +55,7 @@ async def analyse_resume(
     resume: UploadFile = File(..., description="Resume file - PDF or DOCX, max 5 MB"),
     #Reads Form fields
     job_description: str = Form('', description="Job description text (optional)"),
-    user_id: str = Form("", description="Clerk user ID for saving history (optional)")
+    user_id: str = Depends(get_current_user),
 ): 
     warnings: List[str] = []
 
