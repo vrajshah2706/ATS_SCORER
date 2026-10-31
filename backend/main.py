@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.core.config import (
-    ALLLOWED_ORIGINS, 
+    ALLOWED_ORIGINS, 
     APP_DESCRIPTION,
     APP_TITLE,
     APP_VERSION,
@@ -36,7 +36,9 @@ async def lifespan(app:FastAPI):
 
     logger.info(f"Loading SentenceTransformer: {SENTENCE_TRANSFORMER_MODEL}")
     from sentence_transformers import SentenceTransformer 
-    app.state.embedder = SentenceTransformer(SENTENCE_TRANSFORMER_MODEL)
+    app.state.embedder = SentenceTransformer(
+        SENTENCE_TRANSFORMER_MODEL
+    )
     logger.info(f"Loaded SentenceTransformer: {SENTENCE_TRANSFORMER_MODEL}")
 
     logger.info("All models loaded. API is ready to serve requests.")
@@ -57,9 +59,9 @@ app = FastAPI(
     redoc_url = "/redoc",
 )
 
-app.addmiddleware(
+app.add_middleware(
     CORSMiddleware,
-    allow_origins=[*ALLLOWED_ORIGINS],
+    allow_origins=[*ALLOWED_ORIGINS],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

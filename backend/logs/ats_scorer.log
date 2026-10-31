@@ -1,0 +1,44 @@
+2026-10-31 16:00:07,855 - INFO - Staring ATS Reumse Analyzer API ...
+2026-10-31 16:00:07,855 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-10-31 16:00:17,305 - WARNING - en_core_web_md not found - falling back to en_core_web_sm
+2026-10-31 16:00:39,291 - INFO - Staring ATS Reumse Analyzer API ...
+2026-10-31 16:00:39,292 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-10-31 16:00:45,097 - WARNING - en_core_web_md not found - falling back to en_core_web_sm
+2026-10-31 16:02:54,660 - INFO - Staring ATS Reumse Analyzer API ...
+2026-10-31 16:02:54,661 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-10-31 16:03:00,230 - INFO - Loaded en_core_web_md
+2026-10-31 16:03:00,230 - INFO - Loading SentenceTransformer: all_mini_l6_v2
+2026-10-31 16:22:25,615 - INFO - Staring ATS Reumse Analyzer API ...
+2026-10-31 16:22:25,616 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-10-31 16:22:31,413 - INFO - Loaded en_core_web_md
+2026-10-31 16:22:31,413 - INFO - Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-10-31 16:22:48,620 - INFO - Loaded SentenceTransformer: all-MiniLM-L6-v2
+2026-10-31 16:22:48,620 - INFO - All models loaded. API is ready to serve requests.
+2026-10-31 16:23:13,942 - INFO - Shutting down the api!!
+2026-10-31 16:23:16,637 - INFO - Staring ATS Reumse Analyzer API ...
+2026-10-31 16:23:16,637 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-10-31 16:23:21,556 - INFO - Loaded en_core_web_md
+2026-10-31 16:23:21,556 - INFO - Loading SentenceTransformer: all-MiniLM-L6-v2
+2026-10-31 16:23:37,311 - INFO - Loaded SentenceTransformer: all-MiniLM-L6-v2
+2026-10-31 16:23:37,311 - INFO - All models loaded. API is ready to serve requests.
+2026-10-31 16:26:19,120 - INFO - Shutting down the api!!
+2026-10-31 16:26:22,047 - INFO - Staring ATS Reumse Analyzer API ...
+2026-10-31 16:26:22,048 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-10-31 16:26:26,818 - INFO - Loaded en_core_web_md
+2026-10-31 16:26:26,818 - INFO - Loading SentenceTransformer: C:\Users\vrajs\OneDrive\Desktop\ATS_Resume\ATS_SCORER\backend\core\models\fine_tuned_model
+2026-10-31 16:29:57,017 - INFO - Staring ATS Reumse Analyzer API ...
+2026-10-31 16:29:57,017 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-10-31 16:30:02,326 - INFO - Loaded en_core_web_md
+2026-10-31 16:30:02,326 - INFO - Loading SentenceTransformer: C:\Users\vrajs\OneDrive\Desktop\ATS_Resume\ATS_SCORER\backend\core\models\fine_tuned_model
+2026-10-31 16:32:52,423 - INFO - Staring ATS Reumse Analyzer API ...
+2026-10-31 16:32:52,423 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-10-31 16:32:57,280 - INFO - Loaded en_core_web_md
+2026-10-31 16:32:57,280 - INFO - Loading SentenceTransformer: C:\Users\vrajs\OneDrive\Desktop\ATS_Resume\ATS_SCORER\backend\core\models\fine_tuned_model
+2026-10-31 16:33:07,361 - INFO - Loaded SentenceTransformer: C:\Users\vrajs\OneDrive\Desktop\ATS_Resume\ATS_SCORER\backend\core\models\fine_tuned_model
+2026-10-31 16:33:07,361 - INFO - All models loaded. API is ready to serve requests.
+2026-10-31 16:40:33,501 - INFO - Staring ATS Reumse Analyzer API ...
+2026-10-31 16:40:33,502 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-10-31 16:40:37,695 - INFO - Loaded en_core_web_md
+2026-10-31 16:40:37,695 - INFO - Loading SentenceTransformer: C:\Users\vrajs\OneDrive\Desktop\ATS_Resume\ATS_SCORER\backend\core\models\fine_tuned_model
+2026-10-31 16:40:46,112 - INFO - Loaded SentenceTransformer: C:\Users\vrajs\OneDrive\Desktop\ATS_Resume\ATS_SCORER\backend\core\models\fine_tuned_model
+2026-10-31 16:40:46,112 - INFO - All models loaded. API is ready to serve requests.

@@ -5,7 +5,7 @@
 import logging
 from typing import List, Optional
 
-from fastapi import APIRouter, HTTPException, File, Form , Header, Request, UploadFile
+from fastapi import APIRouter, HTTPException, File, Form , Header, Request, UploadFile, Depends
 from backend.models.schemas import AnalysisResponse, ComponentScores, JDComparison, SkillValidationDetails
 #Default values 
 from backend.utils.file_utils import (
@@ -24,6 +24,9 @@ def _clean(text:str) -> str:
     for prefix in ('✅', '🌟', '❌', '⚠️', '📝', '🔴', '🟡', '🟢', '🟠', '👍'):
         text = text.lstrip(prefix)
     return text.strip()
+
+async def get_current_user():
+    return "test_user"
 
 ############################# 
 # Overview of All Endpoints #

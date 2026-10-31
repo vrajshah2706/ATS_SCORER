@@ -9,8 +9,11 @@ try:
 except ImportError: 
     pass
 
+BASE_DIR = Path(__file__).resolve().parent
+
+
 # Api metadata
-API_TITLE = 'ATS RESIME ANALYZER API'
+APP_TITLE = 'ATS RESIME ANALYZER API'
 APP_VERSION = '1.0.0'
 APP_DESCRIPTION = 'anlayse resumes against job descriptions using nlp + ml'
 
@@ -36,7 +39,10 @@ SUPPORTED_FILE_EXTENSION = {'.pdf', '.doc', '.docx'}
 #Model declaration  
 SPACY_MODEL_PRIMARY = "en_core_web_md" #better accuracy 
 SPACY_MODEL_SECONDARY = "en_core_web_sm" #faster but less accurate and fallback model 
-SENTENCE_TRANSFORMER_MODEL = os.getenv("SENTENCE_TRANSFORMER_MODEL", "all_mini_l6_v2") 
+SENTENCE_TRANSFORMER_MODEL = os.getenv(
+    "SENTENCE_TRANSFORMER_MODEL",
+    str(BASE_DIR / "models" / "fine_tuned_model")
+)
 
 #Score component weights - this is a business logic treated as config so that it can be easily changed in the future
 SCORE_WEIGHTS = {
