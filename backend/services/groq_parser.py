@@ -12,7 +12,7 @@ from groq import Groq
 
 logger=logging.getLogger("ats_resume_scorer")
 
-GROQ_MODEL = "llama-3.3b-70b-versatile"
+GROQ_MODEL = "llama-3.3-70b-versatile"
 
 _client=None
 #Using singleton pattern - avoids calling API each time (financial loss) a single call through client is made

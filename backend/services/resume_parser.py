@@ -77,7 +77,7 @@ def _extract_pdf_hyperlinks(file_data: bytes) -> str:
             #collects URLs from link annotations
             for annot_ref in page["/Annots"]:
                 try: 
-                    annot = annot_ref.get_objects()
+                    annot = annot_ref.get_object()
                     if annot.get("/Subtype") != "/Link":
                         continue
                     action = annot.get("/A", {})
@@ -85,7 +85,7 @@ def _extract_pdf_hyperlinks(file_data: bytes) -> str:
                     if uri and isinstance(uri, (str, bytes)):
                         #PYPDF2 may return bytes for URI values
                         if isinstance(uri, bytes):
-                            uri = uri.decode("urf-8", errors="ignore")
+                            uri = uri.decode("utf-8", errors="ignore")
                         uri = uri.strip()
                         if uri.startswith("http"):
                             urls.append(uri)
@@ -93,7 +93,7 @@ def _extract_pdf_hyperlinks(file_data: bytes) -> str:
                     pass
     except Exception:
         pass
-    return "/n".join(urls)
+    return "\n".join(urls)
 
 #Extracting PDF with PDFPlumber (main function)
 def _extract_pdf_with_pdfplumber(file_data: bytes) -> str: 
@@ -103,7 +103,7 @@ def _extract_pdf_with_pdfplumber(file_data: bytes) -> str:
         for page in pdf.pages:
             page_text = page.extract_text()
             if page_text:
-                text += page_text + "/n"
+                text += page_text + "\n"
 
     #If PDF empty raise error 
     if not text.strip():
@@ -117,7 +117,7 @@ def _extract_pdf_with_pdfplumber(file_data: bytes) -> str:
 
     #if any hyperlinks in resume then add it to the text extracted
     if hyperlinks:
-        text = text.strip() + "/n" + hyperlinks
+        text = text.strip() + "\n" + hyperlinks
 
     #return extracted text 
     return text.strip()
@@ -130,7 +130,7 @@ def _extract_pdf_with_pypdf2(file_data: bytes) -> str:
     for page in pdf_reader.pages:
         page_text = page.extract_text()
         if page_text:
-            text += page_text  + "n"
+            text += page_text  + "\n"
 
     #If PDF empty raise error 
     if not text.strip():
@@ -143,7 +143,7 @@ def _extract_pdf_with_pypdf2(file_data: bytes) -> str:
     hyperlinks = _extract_pdf_hyperlinks(file_data)
     #if any hyperlinks in resume then add it to the text extracted
     if hyperlinks:
-            text = text.strip() + "/n" + hyperlinks
+            text = text.strip() + "\n" + hyperlinks
 
     #return extracted text 
     return text.strip()
@@ -160,7 +160,7 @@ def extract_text_from_pdf(file_data:bytes) -> str:
 
         if used_fallback:
             log_info("PDF EXTRACTION succeded using the PyPDF2 fallback", context='resume_parser')
-            return result
+        return result
     #if both functions not working 
     except Exception as e:
         log_error(e, context="extract_text_from_pdf" )
@@ -193,7 +193,7 @@ def extract_text_from_docx(file_data: bytes) -> str:
                     if cell.text.strip():
                         text_parts.append(cell.text)
 
-        text = "/n".join(text_parts)
+        text = "\n".join(text_parts)
 
         if not text.strip():
             raise FileParsingError(
@@ -204,10 +204,10 @@ def extract_text_from_docx(file_data: bytes) -> str:
         #checks for any hyperlink, if so appends to text
         try: 
             for rel in doc.part.rels.values():
-                if "hyperlink" in rel.reltypes.lower():
+                if "hyperlink" in rel.reltype.lower():
                     url = rel._target
                     if isinstance(url, str) and url.startswith("http"):
-                        text += "/n" + url
+                        text += "\n" + url
         except Exception:
             pass
 

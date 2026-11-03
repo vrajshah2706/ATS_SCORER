@@ -15,6 +15,8 @@ def _group_by_severity(issues: List[Dict[str, Any]]) -> Dict[str, List[Dict[str,
     grouped: Dict[str, List[Dict[str, Any]]] = {level: [] for level in SEVERITY_ORDER}
     for issue in issues:
         level = (issue.get("severity_level") or "low").lower()
+        if level == "moderate":  # backend emits "Moderate"; display it as medium
+            level = "medium"
         grouped.setdefault(level, []).append(issue)
     return grouped
 

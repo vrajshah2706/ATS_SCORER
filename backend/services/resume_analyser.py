@@ -9,6 +9,7 @@ from backend.models.schemas import IssueDetail
 from backend.services.groq_parser import parse_resume, parse_job_description
 from backend.services.jd_matcher import compare_resume_with_jd
 from backend.services.feedback_engine import analyse_issues, generate_issues_summary
+from backend.services.recommendation_engine import generate_all_recommendations, format_recommendations_for_api
 from backend.services.ats_scorer import calculate_overall_score, validate_skills_with_projects
 
 
@@ -118,6 +119,41 @@ def analyse_full_resume(
     #Getting Summary of the issues found
     issues_summary = generate_issues_summary(detailed_feedback)
 
+    #Generate prioritised recommendations (shown in the Recommendations section)
+    suggestions: List[str] = []
+    try:
+        sections = {
+            'experience': ' '.join(
+                (e.get('description') or '')
+                for e in parsed_resume.get('experience', []) if isinstance(e, dict)
+            ),
+            'education': ' '.join(
+                f"{e.get('degree') or ''} {e.get('institution') or ''}"
+                for e in parsed_resume.get('education', []) if isinstance(e, dict)
+            ),
+            'skills': ', '.join(str(s) for s in skills),
+            'summary': parsed_resume.get('professional_summary') or '',
+            'projects': ' '.join(
+                f"{p.get('title') or ''} {p.get('description') or ''}" if isinstance(p, dict) else str(p)
+                for p in projects
+            ),
+        }
+        recommendations_result = generate_all_recommendations(
+            skill_validation_results=skill_validation,
+            grammar_results=grammar_results,
+            location_results=location_results,
+            score_results=scores,
+            sections=sections,
+            keyword_analysis=jd_comparison_result,
+            resume_keywords=keywords,
+        )
+        suggestions = [
+            f"{rec['title']}: {rec['description']}"
+            for rec in format_recommendations_for_api(recommendations_result)
+        ]
+    except Exception as exc:
+        logger.warning(f"Recommendation generation failed (non-blocking): {exc}")
+
     validated_raw   = skill_validation.get('validated_skills', [])
     unvalidated_raw = skill_validation.get('unvalidated_skills', [])
     total_skills    = len(validated_raw) + len(unvalidated_raw)
@@ -165,6 +201,7 @@ def analyse_full_resume(
         ),
         "strengths": _generate_strengths(parsed_resume, skills, projects, action_verbs, skill_validation, scores),
         "interpretation":    scores.get('overall_interpretation', ''),
+        "suggestions":       suggestions,
         "skill_validation_details": skill_validation_details,
         "experience_months": experience_months,
     }

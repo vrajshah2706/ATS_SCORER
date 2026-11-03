@@ -9,104 +9,82 @@ tags:
 - loss:CosineSimilarityLoss
 base_model: sentence-transformers/all-mpnet-base-v2
 widget:
-- source_sentence: Data Scientist with 7 years of experience based in London. B.S.
-    in Finance. Previously at Globex and Vertex Systems, where I helped to clean,
-    transform, and analyze large datasets, communicate findings to non-technical stakeholders,
-    and develop predictive models and evaluate their performance. Core skills include
-    scikit-learn, NumPy, machine learning, NLP, data visualization, PyTorch, and statistics.
-    Proven track record of delivering results in fast-paced environments and collaborating
-    across teams to drive measurable impact.
+- source_sentence: BI Analyst with 5 years of experience based in Toronto. B.A. in
+    Economics. Previously at Ridgeline and Initech, where I helped to write SQL queries
+    to extract and analyze data, support decision-making with clear data storytelling,
+    and build dashboards and reports for business stakeholders. Core skills include
+    Power BI, Google Analytics, Python, dashboards, SQL, reporting, ETL, Excel, and
+    Tableau. Proven track record of delivering results in fast-paced environments
+    and collaborating across teams to drive measurable impact.
   sentences:
-  - Cobalt is hiring a Growth Marketing Manager (Berlin). In this role you will grow
-    organic traffic through SEO and content strategy, develop brand messaging and
-    positioning, run email and social media marketing programs, and plan and execute
-    multi-channel marketing campaigns. We are looking for 2+ years of experience and
-    strong skills in Google Analytics, content marketing, copywriting, HubSpot, paid
-    ads, email marketing, brand strategy, campaign management, and SEO. You should
-    be a collaborative team player who thrives on ownership and impact.
-  - Fathom is hiring a UX Designer (London). In this role you will design intuitive
-    user flows and interfaces, advocate for accessible, user-centered design, collaborate
-    closely with product and engineering, and conduct user research and usability
-    testing. We are looking for 4+ years of experience and strong skills in user research,
-    Sketch, wireframing, prototyping, Figma, Adobe XD, and accessibility. You should
-    be a collaborative team player who thrives on ownership and impact.
-  - Fathom is hiring a Software Engineer (Bangalore). In this role you will design
-    and build scalable backend services, optimize application performance and reliability,
-    collaborate with cross-functional teams to ship features, and develop and maintain
-    RESTful APIs. We are looking for 5+ years of experience and strong skills in JavaScript,
-    microservices, Kubernetes, React, GraphQL, TypeScript, and Python. You should
-    be a collaborative team player who thrives on ownership and impact.
-- source_sentence: Senior Data Analyst with 11 years of experience based in London.
-    M.S. in Data Science. Previously at Northwind and Globex, where I helped to identify
-    trends and translate them into recommendations, support decision-making with clear
-    data storytelling, and automate recurring reporting workflows. Core skills include
-    ETL, Google Analytics, SQL, statistics, and data visualization. Proven track record
-    of delivering results in fast-paced environments and collaborating across teams
-    to drive measurable impact.
-  sentences:
-  - TechNova is hiring a Senior Data Scientist (Singapore). In this role you will
+  - TechNova is hiring a Investment Analyst (Austin). In this role you will support
+    annual planning and budgeting cycles, analyze business performance and profitability,
+    produce management reporting and dashboards, and prepare monthly budget vs actual
+    variance analysis. We are looking for 5+ years of experience and strong skills
+    in valuation, SQL, financial reporting, Excel, forecasting, financial modeling,
+    and variance analysis. You should be a collaborative team player who thrives on
+    ownership and impact.
+  - Umbrella Labs is hiring a Senior Data Scientist (London). In this role you will
     translate business problems into data science solutions, clean, transform, and
-    analyze large datasets, communicate findings to non-technical stakeholders, and
-    develop predictive models and evaluate their performance. We are looking for 5+
-    years of experience and strong skills in PyTorch, TensorFlow, R, NLP, machine
-    learning, data visualization, scikit-learn, and Python. You should be a collaborative
+    analyze large datasets, build and deploy machine learning models to production,
+    and run experiments and A/B tests to guide product decisions. We are looking for
+    2+ years of experience and strong skills in pandas, SQL, machine learning, TensorFlow,
+    Python, and NumPy. You should be a collaborative team player who thrives on ownership
+    and impact.
+  - Nimbus is hiring a BI Analyst (Remote). In this role you will identify trends
+    and translate them into recommendations, automate recurring reporting workflows,
+    support decision-making with clear data storytelling, and write SQL queries to
+    extract and analyze data. We are looking for 2+ years of experience and strong
+    skills in ETL, statistics, Excel, SQL, and Google Analytics. You should be a collaborative
     team player who thrives on ownership and impact.
-  - Sonder is hiring a Platform Engineer (Austin). In this role you will automate
-    deployment and provisioning workflows, improve system reliability, monitoring,
-    and alerting, build and maintain CI/CD pipelines, and reduce incident response
-    time and toil. We are looking for 2+ years of experience and strong skills in
-    AWS, Linux, GitOps, Jenkins, monitoring, Docker, Terraform, Python, and Kubernetes.
+- source_sentence: Senior Product Manager with 4 years of experience based in Bangalore.
+    B.S. in Finance. Previously at Ridgeline and Cobalt, where I helped to own the
+    product roadmap and prioritize the backlog, gather and synthesize customer and
+    market feedback, and align stakeholders around a product vision. Core skills include
+    SQL, Agile, prioritization, A/B testing, analytics, roadmap planning, user research,
+    go-to-market, and Scrum. Proven track record of delivering results in fast-paced
+    environments and collaborating across teams to drive measurable impact.
+  sentences:
+  - Lumen is hiring a UX/UI Designer (Singapore). In this role you will advocate for
+    accessible, user-centered design, maintain and evolve the design system, create
+    wireframes, prototypes, and high-fidelity mockups, and collaborate closely with
+    product and engineering. We are looking for 3+ years of experience and strong
+    skills in design systems, wireframing, interaction design, accessibility, Sketch,
+    usability testing, Adobe XD, user research, and prototyping. You should be a collaborative
+    team player who thrives on ownership and impact.
+  - Acme Corp is hiring a Associate Product Manager (London). In this role you will
+    define product requirements and success metrics, work with engineering and design
+    to deliver features, gather and synthesize customer and market feedback, and own
+    the product roadmap and prioritize the backlog. We are looking for 2+ years of
+    experience and strong skills in Agile, analytics, prioritization, stakeholder
+    management, SQL, wireframing, Scrum, and roadmap planning. You should be a collaborative
+    team player who thrives on ownership and impact.
+  - Ridgeline is hiring a Growth Marketing Manager (Austin). In this role you will
+    grow organic traffic through SEO and content strategy, analyze campaign performance
+    and report on KPIs, plan and execute multi-channel marketing campaigns, and run
+    email and social media marketing programs. We are looking for 3+ years of experience
+    and strong skills in paid ads, Google Analytics, email marketing, brand strategy,
+    HubSpot, copywriting, campaign management, social media, and SEO. You should be
+    a collaborative team player who thrives on ownership and impact.
+- source_sentence: Platform Engineer with 1 years of experience based in Berlin. B.A.
+    in Marketing. Previously at Acme Corp and Fathom, where I helped to manage cloud
+    infrastructure with infrastructure-as-code, build and maintain CI/CD pipelines,
+    and reduce incident response time and toil. Core skills include Terraform, Jenkins,
+    GitOps, Python, Docker, and AWS. Proven track record of delivering results in
+    fast-paced environments and collaborating across teams to drive measurable impact.
+  sentences:
+  - Kestrel is hiring a UX/UI Designer (Austin). In this role you will advocate for
+    accessible, user-centered design, maintain and evolve the design system, create
+    wireframes, prototypes, and high-fidelity mockups, and conduct user research and
+    usability testing. We are looking for 4+ years of experience and strong skills
+    in user research, Adobe XD, wireframing, Sketch, Figma, and usability testing.
     You should be a collaborative team player who thrives on ownership and impact.
-  - Lumen is hiring a Senior UX Designer (Toronto). In this role you will collaborate
-    closely with product and engineering, create wireframes, prototypes, and high-fidelity
-    mockups, conduct user research and usability testing, and maintain and evolve
-    the design system. We are looking for 4+ years of experience and strong skills
-    in design systems, user research, interaction design, Figma, wireframing, accessibility,
-    and Adobe XD. You should be a collaborative team player who thrives on ownership
-    and impact.
-- source_sentence: Associate Product Manager with 14 years of experience based in
-    San Francisco. B.S. in Statistics. Previously at Umbrella Labs and Initech, where
-    I helped to analyze usage data to inform product decisions, gather and synthesize
-    customer and market feedback, and align stakeholders around a product vision.
-    Core skills include go-to-market, roadmap planning, analytics, A/B testing, SQL,
-    Scrum, and Agile. Proven track record of delivering results in fast-paced environments
-    and collaborating across teams to drive measurable impact.
-  sentences:
-  - Lumen is hiring a Growth Marketing Manager (Berlin). In this role you will develop
-    brand messaging and positioning, run email and social media marketing programs,
-    analyze campaign performance and report on KPIs, and grow organic traffic through
-    SEO and content strategy. We are looking for 4+ years of experience and strong
-    skills in campaign management, copywriting, social media, brand strategy, HubSpot,
-    email marketing, paid ads, SEO, and content marketing. You should be a collaborative
-    team player who thrives on ownership and impact.
-  - Cobalt is hiring a Backend Engineer (Bangalore). In this role you will develop
-    and maintain RESTful APIs, design and build scalable backend services, collaborate
-    with cross-functional teams to ship features, and optimize application performance
-    and reliability. We are looking for 5+ years of experience and strong skills in
-    Git, Java, microservices, TypeScript, Node.js, REST APIs, and AWS. You should
-    be a collaborative team player who thrives on ownership and impact.
-  - TechNova is hiring a Business Development Manager (Berlin). In this role you will
-    forecast revenue and report on sales metrics, manage and grow a book of business,
-    exceed quarterly sales targets, and develop relationships with key accounts. We
-    are looking for 5+ years of experience and strong skills in CRM, closing, lead
-    generation, Salesforce, forecasting, pipeline management, negotiation, account
-    management, and cold outreach. You should be a collaborative team player who thrives
-    on ownership and impact.
-- source_sentence: Business Development Manager with 6 years of experience based in
-    Toronto. M.S. in Human-Computer Interaction. Previously at TechNova and Cobalt,
-    where I helped to exceed quarterly sales targets, develop relationships with key
-    accounts, and build and maintain a healthy sales pipeline. Core skills include
-    cold outreach, Salesforce, negotiation, closing, lead generation, and account
-    management. Proven track record of delivering results in fast-paced environments
-    and collaborating across teams to drive measurable impact.
-  sentences:
-  - Acme Corp is hiring a Full Stack Developer (Singapore). In this role you will
-    develop and maintain RESTful APIs, collaborate with cross-functional teams to
-    ship features, design and build scalable backend services, and participate in
-    code reviews and technical design discussions. We are looking for 2+ years of
-    experience and strong skills in microservices, AWS, Java, Git, Python, GraphQL,
-    SQL, and Docker. You should be a collaborative team player who thrives on ownership
-    and impact.
+  - Fathom is hiring a Software Engineer (Singapore). In this role you will collaborate
+    with cross-functional teams to ship features, participate in code reviews and
+    technical design discussions, develop and maintain RESTful APIs, and optimize
+    application performance and reliability. We are looking for 3+ years of experience
+    and strong skills in microservices, JavaScript, Python, Docker, SQL, and Java.
+    You should be a collaborative team player who thrives on ownership and impact.
   - Vertex Systems is hiring a People Operations Manager (Singapore). In this role
     you will manage employee relations and performance processes, own compensation
     and benefits administration, drive engagement and retention initiatives, and ensure
@@ -114,41 +92,62 @@ widget:
     and strong skills in compensation, onboarding, performance management, employee
     relations, recruiting, coaching, and compliance. You should be a collaborative
     team player who thrives on ownership and impact.
-  - Nimbus is hiring a BI Analyst (Remote). In this role you will identify trends
-    and translate them into recommendations, automate recurring reporting workflows,
-    support decision-making with clear data storytelling, and write SQL queries to
-    extract and analyze data. We are looking for 2+ years of experience and strong
-    skills in ETL, statistics, Excel, SQL, and Google Analytics. You should be a collaborative
-    team player who thrives on ownership and impact.
-- source_sentence: Senior Product Manager with 13 years of experience based in Berlin.
-    B.S. in Business Administration. Previously at TechNova and BrightData, where
-    I helped to analyze usage data to inform product decisions, own the product roadmap
-    and prioritize the backlog, and work with engineering and design to deliver features.
-    Core skills include stakeholder management, SQL, user research, A/B testing, analytics,
-    wireframing, Scrum, prioritization, and go-to-market. Proven track record of delivering
-    results in fast-paced environments and collaborating across teams to drive measurable
-    impact.
+- source_sentence: Senior Software Engineer with 6 years of experience based in London.
+    B.A. in Economics. Previously at Initech and TechNova, where I helped to optimize
+    application performance and reliability, participate in code reviews and technical
+    design discussions, and design and build scalable backend services. Core skills
+    include Node.js, Docker, Python, JavaScript, Kubernetes, React, and GraphQL. Proven
+    track record of delivering results in fast-paced environments and collaborating
+    across teams to drive measurable impact.
   sentences:
-  - Initech is hiring a Investment Analyst (Remote). In this role you will analyze
-    business performance and profitability, prepare monthly budget vs actual variance
-    analysis, support annual planning and budgeting cycles, and build financial models
-    and forecasts. We are looking for 3+ years of experience and strong skills in
-    accounting, valuation, variance analysis, GAAP, financial reporting, Excel, forecasting,
-    financial modeling, and budgeting. You should be a collaborative team player who
-    thrives on ownership and impact.
-  - TechNova is hiring a UX/UI Designer (Seattle). In this role you will design intuitive
-    user flows and interfaces, advocate for accessible, user-centered design, create
-    wireframes, prototypes, and high-fidelity mockups, and collaborate closely with
-    product and engineering. We are looking for 4+ years of experience and strong
-    skills in user research, wireframing, interaction design, usability testing, and
-    prototyping. You should be a collaborative team player who thrives on ownership
+  - Sonder is hiring a Senior Data Analyst (Singapore). In this role you will automate
+    recurring reporting workflows, maintain data quality and documentation, write
+    SQL queries to extract and analyze data, and identify trends and translate them
+    into recommendations. We are looking for 4+ years of experience and strong skills
+    in Excel, statistics, reporting, SQL, dashboards, Tableau, data visualization,
+    and ETL. You should be a collaborative team player who thrives on ownership and
+    impact.
+  - Globex is hiring a Senior UX Designer (London). In this role you will conduct
+    user research and usability testing, create wireframes, prototypes, and high-fidelity
+    mockups, advocate for accessible, user-centered design, and collaborate closely
+    with product and engineering. We are looking for 4+ years of experience and strong
+    skills in user research, Adobe XD, accessibility, wireframing, Figma, and usability
+    testing. You should be a collaborative team player who thrives on ownership and
+    impact.
+  - Fathom is hiring a Software Engineer (Bangalore). In this role you will design
+    and build scalable backend services, optimize application performance and reliability,
+    collaborate with cross-functional teams to ship features, and develop and maintain
+    RESTful APIs. We are looking for 5+ years of experience and strong skills in JavaScript,
+    microservices, Kubernetes, React, GraphQL, TypeScript, and Python. You should
+    be a collaborative team player who thrives on ownership and impact.
+- source_sentence: Software Engineer with 9 years of experience based in Seattle.
+    B.Eng. in Software Engineering. Previously at Northwind and BrightData, where
+    I helped to develop and maintain RESTful APIs, design and build scalable backend
+    services, and participate in code reviews and technical design discussions. Core
+    skills include SQL, React, REST APIs, AWS, microservices, JavaScript, TypeScript,
+    Java, and Kubernetes. Proven track record of delivering results in fast-paced
+    environments and collaborating across teams to drive measurable impact.
+  sentences:
+  - Kestrel is hiring a Senior Data Analyst (London). In this role you will support
+    decision-making with clear data storytelling, build dashboards and reports for
+    business stakeholders, automate recurring reporting workflows, and write SQL queries
+    to extract and analyze data. We are looking for 4+ years of experience and strong
+    skills in ETL, Google Analytics, reporting, data visualization, statistics, dashboards,
+    Tableau, and Excel. You should be a collaborative team player who thrives on ownership
     and impact.
-  - Nimbus is hiring a FP&A Analyst (Austin). In this role you will produce management
-    reporting and dashboards, support annual planning and budgeting cycles, analyze
-    business performance and profitability, and partner with department heads on cost
-    control. We are looking for 2+ years of experience and strong skills in GAAP,
-    financial reporting, SQL, Excel, forecasting, and valuation. You should be a collaborative
+  - Initech is hiring a UX/UI Designer (New York). In this role you will collaborate
+    closely with product and engineering, advocate for accessible, user-centered design,
+    design intuitive user flows and interfaces, and create wireframes, prototypes,
+    and high-fidelity mockups. We are looking for 3+ years of experience and strong
+    skills in Sketch, user research, design systems, wireframing, prototyping, usability
+    testing, accessibility, Adobe XD, and interaction design. You should be a collaborative
     team player who thrives on ownership and impact.
+  - Fathom is hiring a Business Development Manager (Singapore). In this role you
+    will negotiate and close deals with new clients, exceed quarterly sales targets,
+    manage and grow a book of business, and develop relationships with key accounts.
+    We are looking for 4+ years of experience and strong skills in account management,
+    cold outreach, Salesforce, pipeline management, CRM, and closing. You should be
+    a collaborative team player who thrives on ownership and impact.
 pipeline_tag: sentence-similarity
 library_name: sentence-transformers
 metrics:
@@ -165,10 +164,10 @@ model-index:
       type: ats-val
     metrics:
     - type: pearson_cosine
-      value: 0.7768101404130792
+      value: 0.7741629168940739
       name: Pearson Cosine
     - type: spearman_cosine
-      value: 0.7809448439152239
+      value: 0.7599434199121046
       name: Spearman Cosine
 ---
 
@@ -222,9 +221,9 @@ from sentence_transformers import SentenceTransformer
 model = SentenceTransformer("sentence_transformers_model_id")
 # Run inference
 sentences = [
-    'Senior Product Manager with 13 years of experience based in Berlin. B.S. in Business Administration. Previously at TechNova and BrightData, where I helped to analyze usage data to inform product decisions, own the product roadmap and prioritize the backlog, and work with engineering and design to deliver features. Core skills include stakeholder management, SQL, user research, A/B testing, analytics, wireframing, Scrum, prioritization, and go-to-market. Proven track record of delivering results in fast-paced environments and collaborating across teams to drive measurable impact.',
-    'Initech is hiring a Investment Analyst (Remote). In this role you will analyze business performance and profitability, prepare monthly budget vs actual variance analysis, support annual planning and budgeting cycles, and build financial models and forecasts. We are looking for 3+ years of experience and strong skills in accounting, valuation, variance analysis, GAAP, financial reporting, Excel, forecasting, financial modeling, and budgeting. You should be a collaborative team player who thrives on ownership and impact.',
-    'Nimbus is hiring a FP&A Analyst (Austin). In this role you will produce management reporting and dashboards, support annual planning and budgeting cycles, analyze business performance and profitability, and partner with department heads on cost control. We are looking for 2+ years of experience and strong skills in GAAP, financial reporting, SQL, Excel, forecasting, and valuation. You should be a collaborative team player who thrives on ownership and impact.',
+    'Software Engineer with 9 years of experience based in Seattle. B.Eng. in Software Engineering. Previously at Northwind and BrightData, where I helped to develop and maintain RESTful APIs, design and build scalable backend services, and participate in code reviews and technical design discussions. Core skills include SQL, React, REST APIs, AWS, microservices, JavaScript, TypeScript, Java, and Kubernetes. Proven track record of delivering results in fast-paced environments and collaborating across teams to drive measurable impact.',
+    'Kestrel is hiring a Senior Data Analyst (London). In this role you will support decision-making with clear data storytelling, build dashboards and reports for business stakeholders, automate recurring reporting workflows, and write SQL queries to extract and analyze data. We are looking for 4+ years of experience and strong skills in ETL, Google Analytics, reporting, data visualization, statistics, dashboards, Tableau, and Excel. You should be a collaborative team player who thrives on ownership and impact.',
+    'Fathom is hiring a Business Development Manager (Singapore). In this role you will negotiate and close deals with new clients, exceed quarterly sales targets, manage and grow a book of business, and develop relationships with key accounts. We are looking for 4+ years of experience and strong skills in account management, cold outreach, Salesforce, pipeline management, CRM, and closing. You should be a collaborative team player who thrives on ownership and impact.',
 ]
 embeddings = model.encode(sentences)
 print(embeddings.shape)
@@ -233,9 +232,9 @@ print(embeddings.shape)
 # Get the similarity scores for the embeddings
 similarities = model.similarity(embeddings, embeddings)
 print(similarities)
-# tensor([[1.0000, 0.3957, 0.5469],
-#         [0.3957, 1.0000, 0.7675],
-#         [0.5469, 0.7675, 1.0000]])
+# tensor([[1.0000, 0.2824, 0.1313],
+#         [0.2824, 1.0000, 0.2258],
+#         [0.1313, 0.2258, 1.0000]])
 ```
 <!--
 ### Direct Usage (Transformers)
@@ -272,8 +271,8 @@ You can finetune this model on your own dataset.
 
 | Metric              | Value      |
 |:--------------------|:-----------|
-| pearson_cosine      | 0.7768     |
-| **spearman_cosine** | **0.7809** |
+| pearson_cosine      | 0.7742     |
+| **spearman_cosine** | **0.7599** |
 
 <!--
 ## Bias, Risks and Limitations
@@ -300,13 +299,13 @@ You can finetune this model on your own dataset.
   |:---------|:-------------------------------------------------------------------------------------|:-------------------------------------------------------------------------------------|:-----------------------------------------------------------------|
   | type     | string                                                                               | string                                                                               | float                                                            |
   | modality | text                                                                                 | text                                                                                 |                                                                  |
-  | details  | <ul><li>min: 89 tokens</li><li>mean: 105.89 tokens</li><li>max: 125 tokens</li></ul> | <ul><li>min: 92 tokens</li><li>mean: 105.25 tokens</li><li>max: 124 tokens</li></ul> | <ul><li>min: 0.06</li><li>mean: 0.56</li><li>max: 0.94</li></ul> |
+  | details  | <ul><li>min: 93 tokens</li><li>mean: 106.86 tokens</li><li>max: 125 tokens</li></ul> | <ul><li>min: 93 tokens</li><li>mean: 104.97 tokens</li><li>max: 124 tokens</li></ul> | <ul><li>min: 0.06</li><li>mean: 0.55</li><li>max: 0.94</li></ul> |
 * Samples:
-  | sentence_0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | sentence_1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | label             |
-  |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------|
-  | <code>Investment Analyst with 3 years of experience based in Toronto. MBA. Previously at Initech and Lumen, where I helped to build financial models and forecasts, partner with department heads on cost control, and produce management reporting and dashboards. Core skills include financial modeling, budgeting, GAAP, forecasting, variance analysis, and SQL. Proven track record of delivering results in fast-paced environments and collaborating across teams to drive measurable impact.</code>                                                                            | <code>Fathom is hiring a Senior Product Manager (Remote). In this role you will own the product roadmap and prioritize the backlog, analyze usage data to inform product decisions, align stakeholders around a product vision, and work with engineering and design to deliver features. We are looking for 4+ years of experience and strong skills in A/B testing, Scrum, SQL, prioritization, analytics, user research, and Agile. You should be a collaborative team player who thrives on ownership and impact.</code> | <code>0.27</code> |
-  | <code>Regional Sales Manager with 5 years of experience based in Berlin. B.S. in Finance. Previously at Globex and Northwind, where I helped to negotiate and close deals with new clients, build and maintain a healthy sales pipeline, and forecast revenue and report on sales metrics. Core skills include closing, cold outreach, B2B sales, forecasting, lead generation, and account management. Proven track record of delivering results in fast-paced environments and collaborating across teams to drive measurable impact.</code>                                          | <code>Kestrel is hiring a Business Development Manager (Bangalore). In this role you will exceed quarterly sales targets, build and maintain a healthy sales pipeline, forecast revenue and report on sales metrics, and negotiate and close deals with new clients. We are looking for 5+ years of experience and strong skills in lead generation, CRM, forecasting, cold outreach, and account management. You should be a collaborative team player who thrives on ownership and impact.</code>                          | <code>0.87</code> |
-  | <code>Business Analyst with 4 years of experience based in Remote. B.S. in Business Administration. Previously at Vertex Systems and Northwind, where I helped to automate recurring reporting workflows, identify trends and translate them into recommendations, and maintain data quality and documentation. Core skills include Google Analytics, SQL, Tableau, dashboards, Power BI, Python, reporting, statistics, and data visualization. Proven track record of delivering results in fast-paced environments and collaborating across teams to drive measurable impact.</code> | <code>Acme Corp is hiring a Full Stack Developer (Singapore). In this role you will develop and maintain RESTful APIs, collaborate with cross-functional teams to ship features, design and build scalable backend services, and participate in code reviews and technical design discussions. We are looking for 2+ years of experience and strong skills in microservices, AWS, Java, Git, Python, GraphQL, SQL, and Docker. You should be a collaborative team player who thrives on ownership and impact.</code>         | <code>0.21</code> |
+  | sentence_0                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | sentence_1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | label             |
+  |:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:------------------|
+  | <code>Data Analyst with 8 years of experience based in Remote. B.A. in Marketing. Previously at Kestrel and Ridgeline, where I helped to support decision-making with clear data storytelling, write SQL queries to extract and analyze data, and maintain data quality and documentation. Core skills include ETL, Excel, data visualization, dashboards, statistics, and Python. Proven track record of delivering results in fast-paced environments and collaborating across teams to drive measurable impact.</code>                                             | <code>Initech is hiring a Sales Manager (Singapore). In this role you will manage and grow a book of business, forecast revenue and report on sales metrics, negotiate and close deals with new clients, and develop relationships with key accounts. We are looking for 2+ years of experience and strong skills in negotiation, pipeline management, forecasting, closing, lead generation, and cold outreach. You should be a collaborative team player who thrives on ownership and impact.</code>                                      | <code>0.29</code> |
+  | <code>Associate Product Manager with 13 years of experience based in New York. B.S. in Statistics. Previously at Vertex Systems and Kestrel, where I helped to align stakeholders around a product vision, gather and synthesize customer and market feedback, and define product requirements and success metrics. Core skills include A/B testing, go-to-market, roadmap planning, Agile, analytics, Scrum, and wireframing. Proven track record of delivering results in fast-paced environments and collaborating across teams to drive measurable impact.</code> | <code>Globex is hiring a Group Product Manager (London). In this role you will work with engineering and design to deliver features, align stakeholders around a product vision, analyze usage data to inform product decisions, and define product requirements and success metrics. We are looking for 2+ years of experience and strong skills in SQL, user research, Scrum, stakeholder management, roadmap planning, analytics, and wireframing. You should be a collaborative team player who thrives on ownership and impact.</code> | <code>0.87</code> |
+  | <code>Product Designer with 13 years of experience based in Remote. B.S. in Finance. Previously at Initech and Ridgeline, where I helped to advocate for accessible, user-centered design, conduct user research and usability testing, and maintain and evolve the design system. Core skills include user research, accessibility, Figma, usability testing, design systems, and Adobe XD. Proven track record of delivering results in fast-paced environments and collaborating across teams to drive measurable impact.</code>                                   | <code>Kestrel is hiring a UX/UI Designer (Austin). In this role you will advocate for accessible, user-centered design, maintain and evolve the design system, create wireframes, prototypes, and high-fidelity mockups, and conduct user research and usability testing. We are looking for 4+ years of experience and strong skills in user research, Adobe XD, wireframing, Sketch, Figma, and usability testing. You should be a collaborative team player who thrives on ownership and impact.</code>                                  | <code>0.9</code>  |
 * Loss: [<code>CosineSimilarityLoss</code>](https://sbert.net/docs/package_reference/sentence_transformer/losses.html#cosinesimilarityloss) with these parameters:
   ```json
   {
@@ -434,25 +433,25 @@ You can finetune this model on your own dataset.
 ### Training Logs
 | Epoch | Step | ats-val_spearman_cosine |
 |:-----:|:----:|:-----------------------:|
-| 1.0   | 13   | 0.7173                  |
-| 2.0   | 26   | 0.7026                  |
-| 3.0   | 39   | 0.7385                  |
-| 4.0   | 52   | 0.7646                  |
-| 5.0   | 65   | 0.7689                  |
-| 6.0   | 78   | 0.7708                  |
-| 7.0   | 91   | 0.7733                  |
-| 8.0   | 104  | 0.7843                  |
-| 9.0   | 117  | 0.7809                  |
-| 10.0  | 130  | 0.7809                  |
+| 1.0   | 13   | 0.7065                  |
+| 2.0   | 26   | 0.7459                  |
+| 3.0   | 39   | 0.7571                  |
+| 4.0   | 52   | 0.7581                  |
+| 5.0   | 65   | 0.7531                  |
+| 6.0   | 78   | 0.7598                  |
+| 7.0   | 91   | 0.7635                  |
+| 8.0   | 104  | 0.7603                  |
+| 9.0   | 117  | 0.7599                  |
+| 10.0  | 130  | 0.7599                  |
 
 
 ### Training Time
-- **Training**: 3.3 minutes
+- **Training**: 2.3 minutes
 
 ### Framework Versions
 - Python: 3.13.16
 - Sentence Transformers: 5.7.0
-- Transformers: 5.21.0
+- Transformers: 5.22.0
 - PyTorch: 2.11.0+cu130
 - Accelerate: 1.15.0
 - Datasets: 4.8.5

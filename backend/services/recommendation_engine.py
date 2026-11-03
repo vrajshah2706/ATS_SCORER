@@ -67,7 +67,7 @@ def generate_skill_recommendations(skill_validation_results: Dict) -> List[Recom
     recommendation.append(Recommendation(
         title= "Validate Your Listed Skills",
         description= (
-            f"{len(unvalidated)} skill(s) are not demonstrated in your projects or experience."
+            f"{len(unvalidated)} skill(s) are not demonstrated in your projects or experience. "
             "ATS systems and recruiters look for evidence that you've actually used the skills you claim"
         ),
         priority= priority,
@@ -232,7 +232,7 @@ def generate_keyword_recommendations(
 
     #for keyword analysis against JD - user uploads resume and JD
     if keyword_analysis:
-        missing = keyword_analysis.get("missing_keyword" , [])
+        missing = keyword_analysis.get("missing_keywords" , [])
         gap = keyword_analysis.get("skills_gap",[])
         match_pct = keyword_analysis.get("match_percentage", 0.0)
 

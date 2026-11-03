@@ -233,7 +233,7 @@ def render() -> None:
     try:
         with st.spinner("Analyzing your resume... this can take 10–30 seconds."):
             #Calling backend API
-            analysis = api_client.analyze_resume(
+            analysis = api_client.analyse_resume(
                 resume_file=resume_file,
                 access_token=access_token,
                 job_description=job_description,

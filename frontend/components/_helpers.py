@@ -34,6 +34,6 @@ def get_severity_style(severity: str) -> Tuple[str, str, str]:
     level = (severity or "").lower()
     if level in ("critical", "high"):
         return "🔴", "#c62828", "#ffebee"
-    if level == "medium":
+    if level in ("medium", "moderate"):
         return "🟡", "#f57c00", "#fff3e0"
     return "🟢", "#2e7d32", "#e8f5e9"

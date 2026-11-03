@@ -132,6 +132,12 @@ async def analyse_resume(
         component_scores=ComponentScores(**result['component_scores']),
         issues_summary=result['issues_summary'],
         detailed_feedback=detailed_fb,
+        strengths=result.get('strengths', []),
+        critical_issues=[
+            fb.issue_title for fb in detailed_fb
+            if str(fb.severity_level).lower() in ('high', 'critical')
+        ],
+        suggestions=result.get('suggestions', []),
         jd_match_analysis=jd_comparison_result,
         skill_validation_details=skill_val_details,
 
