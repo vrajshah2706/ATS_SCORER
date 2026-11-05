@@ -10,7 +10,7 @@ import requests
 import streamlit as st
 
 
-DEFAULT_BACKEND_URL = "http://localhost:8000"
+DEFAULT_BACKEND_URL = "http://localhost:8080"
 
 #Read the backend URL from Streamlit secrets, with a localhost fallback
 def _backend_url() -> str:

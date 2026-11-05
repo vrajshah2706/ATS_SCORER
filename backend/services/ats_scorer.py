@@ -2,6 +2,11 @@
 Scoring and some feedback 
 turns parsed resume sections, keywords, grammar, results and detected location
 into component scores, an overall score and feedback. 
+
+How the overall score works (kept simple so the numbers on screen add up):
+    overall = formatting (max 20) + keywords (max 25) + content (max 25)
+              + skill validation (max 15) + ATS compatibility (max 15)
+              - job description keyword-gap penalty (only when a JD is supplied)
 """
 import re
 import spacy 
@@ -10,17 +15,43 @@ from sentence_transformers import SentenceTransformer
 from typing import Dict, List,Optional, Tuple 
 
 from backend.utils.file_utils import log_warning
-#Change to the fine tune model by changing the core.config file 
-from backend.core.config import SENTENCE_TRANSFORMER_MODEL
-from backend.utils.matching import fuzzy_match_keywords
+from backend.utils.matching import fuzzy_match_keywords, normalise_skill, SKILL_ALIASES
 
 
-ZIP_CODE_PATTERN = r'\b\d{5}(?:-\d{4})?\b'
+#########################
+#  DETECTION PATTERNS   #
+#########################
 
+#Full street address, e.g. "12 Smith Street", "4/12 Smith St", "5 COLLINS STREET".
+#The street name must be capitalised so ordinary phrases are not mistaken for addresses.
 STREET_ADDRESS_PATTERN = (
-    r'\b\d+\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*\s+'
-    r'(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Lane|Ln|Drive|Dr|Court|Ct|Circle|Cir|Way|Place|Pl)\b'
+    r'\b\d{1,5}[A-Za-z]?(?:\s*[/-]\s*\d{1,5})?\s+'
+    r'(?:(?:[A-Z][a-z]+|[A-Z]{2,})\s+){1,3}'
+    r'(?i:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Lane|Ln|Drive|Dr|Court|Ct|Circle|Cir|'
+    r'Way|Place|Pl|Parade|Pde|Crescent|Cres|Terrace|Tce|Highway|Hwy)\b'
 )
+
+#Postal codes are only matched in formats that cannot be confused with phone numbers or other digits.
+POSTAL_CODE_PATTERNS = [
+    r'\b(?:VIC|NSW|QLD|SA|WA|TAS|ACT|NT)\s+\d{4}\b',                  # Australia: "VIC 3000"
+    r'\b[A-Z]{2}\s+\d{5}(?:-\d{4})?\b',                               # US: "CA 94105"
+    r'[A-Za-z]\s*[,\-–]\s*\d{6}\b',                                   # India: "Mumbai - 400001"
+    r'\b(?i:pin(?:\s*code)?|post(?:al)?\s*code|zip(?:\s*code)?)\b\s*[:\-]?\s*\d{4,6}\b',  # labelled
+]
+
+#Patterns that count as a measurable achievement. Shared by the content score and the
+#"No Quantifiable Achievements" feedback so the two can never disagree.
+QUANTIFIED_PATTERNS = [
+    r'\d+(?:\.\d+)?\s*%',                                    # 40%
+    r'[$€£₹]\s?\d',                                          # $5, ₹10
+    r'\d+(?:\.\d+)?[kKmMbB]\b',                              # 10K, 2M
+    r'\d+\+',                                                # 500+
+    r'\d{1,3}(?:,\d{3})+',                                   # 10,000
+    r'\b\d+\s*(?:users|customers|clients|projects|hours|days|months|years|requests|records|'
+    r'endpoints|features|members|students|people|teams|transactions|services|applications|apps|tests|pages)\b',
+    r'(?:increased|decreased|improved|reduced|grew|saved|boosted|cut|raised)\s+(?:\w+\s+){0,3}(?:by\s+)?\d+',
+    r'\b(?:team|group)\s+of\s+\d+',                          # team of 5
+]
 
 
 ##################################
@@ -36,47 +67,63 @@ def _tier_score(n: float, tiers:list) -> float:
     return 0.0
 
 #Location/Privacy detection - searches the resume text in 3 ways
-def detect_location_info(text:str, nlp: spacy.language) -> Dict:
+#ignore_terms: skills/keywords from the resume, so tech terms spaCy mistakes for places (e.g. "Java") are not counted
+def detect_location_info(text:str, nlp: spacy.Language, ignore_terms: Optional[List[str]] = None) -> Dict:
+    ignore = {t.strip().lower() for t in (ignore_terms or []) if isinstance(t, str)}
     locations = []
+    seen_places = set()
 
     #each method catches something else that might be missed by the previous one or cant detect
-    #method 1: spacy named entity reconginiton 
+    #method 1: spacy named entity reconginiton - place names (each distinct place counted once)
     doc = nlp(text)
     for ent in doc.ents:
-        if ent.label_ in ['GPE', 'LOC']:
-            locations.append({'text': ent.text, 'type': ent.label_.lower(), 'start': ent.start_char})
+        if ent.label_ not in ('GPE', 'LOC'):
+            continue
+        key = ent.text.strip().lower()
+        if not key or key in ignore or key in seen_places:
+            continue
+        seen_places.add(key)
+        locations.append({'text': ent.text, 'type': ent.label_.lower(), 'start': ent.start_char})
 
-    #moetod 2: street address regx
-    for match in re.finditer(STREET_ADDRESS_PATTERN, text, re.IGNORECASE):
-        locations.append({'text': match.group(), 'type': 'address', 'start': match.start()})
+    #method 2: street address regex
+    for match in re.finditer(STREET_ADDRESS_PATTERN, text):
+        locations.append({'text': match.group().strip(), 'type': 'address', 'start': match.start()})
 
-    #method 3: ZIP/PIN CODE REGEX PATTERN
-    for match in re.finditer(ZIP_CODE_PATTERN, text):
-        locations.append({'text': match.group(), 'type': 'zip', 'start': match.start()})
+    #method 3: postal / ZIP / PIN code regexes (several countries, formats that avoid phone numbers)
+    for pattern in POSTAL_CODE_PATTERNS:
+        for match in re.finditer(pattern, text):
+            locations.append({'text': match.group().strip(), 'type': 'postal_code', 'start': match.start()})
 
-    has_address = any(loc['type'] == 'address' for loc in locations)
-    has_zip     = any(loc['type'] == 'zip'     for loc in locations)
+    place_count = sum(1 for loc in locations if loc['type'] in ('gpe', 'loc'))
+    has_address = any(loc['type'] == 'address'     for loc in locations)
+    has_postal  = any(loc['type'] == 'postal_code' for loc in locations)
 
-    if has_address and has_zip:
+    #Risk rules:
+    #  street address and/or postal code -> high (a real privacy risk, penalised)
+    #  many different place names        -> medium (location sprinkled through the resume, small penalty)
+    #  a few place names (e.g. "City, State" in the header) -> low, no penalty - that is normal and recommended
+    if has_address and has_postal:
         privacy_risk, penalty = "high" , 5.0
-    elif has_address or has_zip:
+    elif has_address or has_postal:
         privacy_risk, penalty = "high" , 4.0
-    elif len(locations) > 3:
-        privacy_risk, penalty = "medium" , 3.0
-    elif locations:
-        privacy_risk, penalty = "low" , 2.0
+    elif place_count > 4:
+        privacy_risk, penalty = "medium" , 2.0
+    elif place_count > 0:
+        privacy_risk, penalty = "low" , 0.0
     else: 
         privacy_risk, penalty = "none" , 0.0
 
     recommendations = []
-    if not locations:
-        recommendations.append(" No privacy concerns detected.")
+    if privacy_risk == "none":
+        recommendations.append("No privacy concerns detected.")
     if has_address:
-        recommendations.append(" Remove full street addresses — ATS systems don't need this and it's a privacy risk.")
-    if has_zip:
-        recommendations.append(" Remove zip codes — this level of location detail is unnecessary.")
-    if privacy_risk in ('low', 'medium') and not has_address and not has_zip:
-        recommendations.append(" Consider reducing location mentions. 'City, State' in the contact header is sufficient.")
+        recommendations.append("Remove full street addresses — ATS systems don't need this and it's a privacy risk.")
+    if has_postal:
+        recommendations.append("Remove postal / ZIP / PIN codes — this level of location detail is unnecessary.")
+    if privacy_risk == "medium":
+        recommendations.append("Consider reducing location mentions. 'City, State' in the contact header is sufficient.")
+    if privacy_risk == "low":
+        recommendations.append("Location detail looks appropriate ('City, State' style).")
 
     #returns detected locations, privacy risk, recommendations and penalty
     return {
@@ -87,49 +134,121 @@ def detect_location_info(text:str, nlp: spacy.language) -> Dict:
         'penalty_applied':    penalty,
     }
 
-def _calculate_semantic_similarity(skill: str, text:str, embedder: SentenceTransformer) -> float:
-    #similarity = (A · B) / (|A| × |B|)
+
+#################################
+#  SKILL VALIDATION HELPERS     #
+#################################
+
+#All spellings of a skill worth searching for: the skill itself, its canonical alias and known aliases,
+#plus hyphen / space / dot variants (e.g. "scikit-learn", "scikit learn", "sklearn", "Node.js", "nodejs")
+def _skill_variants(skill: str) -> List[str]:
+    base = skill.strip().lower()
+    canon = normalise_skill(base)
+    forms = {base, canon}
+    forms.update(alias for alias, target in SKILL_ALIASES.items() if target == canon)
+
+    expanded = set()
+    for form in forms:
+        expanded.update({
+            form,
+            form.replace('-', ' '),
+            form.replace(' ', '-'),
+            form.replace('.', ''),
+            form.replace(' ', ''),
+        })
+    return [v for v in expanded if v]
+
+#True if the skill appears in the text as a whole word/term (not inside another word).
+#Very short skills (C, R, Go) must match case-sensitively so they don't match ordinary words or letters.
+def _contains_skill(skill: str, text: str) -> bool:
+    skill = skill.strip()
     if not skill or not text:
-        return 0.0
-    #encodes a skill and a text passage into vectors 
+        return False
+
+    if len(skill) <= 2:
+        pattern = rf'(?<![A-Za-z0-9]){re.escape(skill)}(?![A-Za-z0-9+#])'
+        return re.search(pattern, text) is not None
+
+    lowered = text.lower()
+    for variant in _skill_variants(skill):
+        if re.search(rf'(?<![a-z0-9]){re.escape(variant)}(?![a-z0-9])', lowered):
+            return True
+    return False
+
+#Splits text into sentence / bullet sized pieces. A short skill compared with a whole paragraph
+#scores low even when the paragraph clearly uses it, so the semantic fallback compares against pieces.
+def _split_into_chunks(text: str) -> List[str]:
+    parts = re.split(r'[\n\r•·▪◦]+|(?<=[.!?])\s+', text)
+    return [p.strip() for p in parts if len(p.strip()) > 10]
+
+def _unit_vectors(vectors) -> np.ndarray:
+    arr = np.asarray(vectors, dtype=float)
+    norms = np.linalg.norm(arr, axis=1, keepdims=True)
+    return arr / np.clip(norms, 1e-9, None)
+
+#Semantic fallback: for skills with no exact evidence, check whether any sentence in a project/experience
+#means the same thing. All skills and all sentences are embedded in two batched calls (fast).
+def _add_semantic_evidence(
+        pending: List[str],
+        sources: List[Tuple[str, str]],
+        evidence: Dict[str, List[str]],
+        similarity: Dict[str, float],
+        embedder: SentenceTransformer,
+        threshold: float,
+) -> None:
+    chunk_texts: List[str] = []
+    chunk_source: List[int] = []
+    for idx, (_, text) in enumerate(sources):
+        for chunk in _split_into_chunks(text):
+            chunk_texts.append(chunk)
+            chunk_source.append(idx)
+
+    if not chunk_texts:
+        return
 
     try:
-        skill_vec = embedder.encode(skill, convert_to_tensor= False)
-        text_vec =  embedder.encode(text, convert_to_tensor= False)
-
-        #computes cosine similarity score
-        similarity = np.dot(skill_vec, text_vec) / (
-            np.linalg.norm(skill_vec) * np.linalg.norm(text_vec)
-        )
-
-        return float(max(0.0, min(1.0, similarity)))
-    
+        skill_vecs = _unit_vectors(embedder.encode(pending))
+        chunk_vecs = _unit_vectors(embedder.encode(chunk_texts))
     except Exception as e:
-        #if embeddings fail log error 
-        log_warning(f"Similarity error for {skill}: {e}", context="ats_scorer")
-        return 0.0
+        #if embeddings fail log warning - skills simply stay unvalidated
+        log_warning(f"Semantic skill matching failed: {e}", context="ats_scorer")
+        return
 
+    sims = skill_vecs @ chunk_vecs.T   #cosine similarity: rows = skills, columns = sentences
+    source_of_chunk = np.array(chunk_source)
 
-# skills matching - 2 options
-def _skill_matches(skill: str, text: str, embedder: SentenceTransformer, threshold: float) -> Tuple[bool, float]:
-    #fast , O(n) directly check if skill is a substring of the text (case-insensitive)
-    #straight forward rather than spending resources 
-    if skill.lower() in text.lower():
-        return True, 1.0
-
-    #slow, semantic similarity check using sentence embeddings
-    sim = _calculate_semantic_similarity(skill, text, embedder)
-    return sim >= threshold, sim 
+    for i, skill in enumerate(pending):
+        for idx, (label, _) in enumerate(sources):
+            mask = source_of_chunk == idx
+            if not mask.any():
+                continue
+            best = float(sims[i, mask].max())
+            similarity[skill] = max(similarity[skill], best)
+            if best >= threshold and label not in evidence[skill]:
+                evidence[skill].append(label)
 
 
 #Skill validation - checks whether each listed skill has evidence in the resume's project or experience 
+#Evidence is looked for in: project title + description + technologies, and experience title/company/description
 def validate_skills_with_projects(
         skills: List[str],
-        projects: List[str],
+        projects: List[Dict],
         experience_entries: List[Dict],
         embedder: SentenceTransformer,
         threshold: float=0.6
 ) -> Dict:
+    #remove duplicate skills (case-insensitive) so the same skill is never counted twice
+    unique_skills: List[str] = []
+    seen = set()
+    for skill in skills or []:
+        if not isinstance(skill, str) or not skill.strip():
+            continue
+        key = skill.strip().lower()
+        if key not in seen:
+            seen.add(key)
+            unique_skills.append(skill.strip())
+    skills = unique_skills
+
     #default  values in no skills 
     if not skills:
         return {
@@ -140,47 +259,58 @@ def validate_skills_with_projects(
             'validation_score':      0.0,
         }
 
-    #combined string from experience job titles, companies & description
+    #Evidence sources: each project (title + description + technologies) and one combined experience text
+    sources: List[Tuple[str, str]] = []
+    for project in projects or []:
+        if isinstance(project, dict):
+            technologies = project.get('technologies') or []
+            if isinstance(technologies, str):
+                technologies = [technologies]
+            text = ' '.join([
+                project.get('title') or '',
+                project.get('description') or '',
+                ', '.join(str(t) for t in technologies),
+            ]).strip()
+            label = project.get('title') or 'Untitled Project'
+        else:
+            text, label = str(project), 'Untitled Project'
+        if text:
+            sources.append((label, text))
+
     experience_text = ' '.join(
-        f"{e.get('job_title', '')} {e.get('company', '')} {e.get('description', '')}"
-        for e in experience_entries
+        f"{e.get('job_title') or ''} {e.get('company') or ''} {e.get('description') or ''}"
+        for e in (experience_entries or [])
         if isinstance(e, dict)
     ).strip()
+    if experience_text:
+        sources.append(("Experience Section", experience_text))
+
+    evidence: Dict[str, List[str]] = {skill: [] for skill in skills}
+    similarity: Dict[str, float] = {skill: 0.0 for skill in skills}
+
+    #Step 1 - exact (whole word) match in every source
+    for skill in skills:
+        for label, text in sources:
+            if _contains_skill(skill, text):
+                if label not in evidence[skill]:
+                    evidence[skill].append(label)
+                similarity[skill] = 1.0
+
+    #Step 2 - semantic match, only for skills that still have no evidence
+    pending = [skill for skill in skills if not evidence[skill]]
+    if pending and sources:
+        _add_semantic_evidence(pending, sources, evidence, similarity, embedder, threshold)
 
     validated_skills = []
     unvalidated_skills = []
     skill_project_mapping = {}
 
-   
     for skill in skills:
-        matching_projects = []
-        max_similarity = 0.0
-
-        #compare each skill against each project
-        for project in projects:
-            project_text = f"{project.get("title", "")} {project.get("description","")}"
-            matched, sim = _skill_matches(skill, project_text, embedder, threshold)
-            max_similarity = max(max_similarity, sim)
-
-            #if skill matched add current project to matched_projects
-            if matched: 
-                matching_projects.append(project.get("title", "Untitled Project"))
-
-        #compare each skill against the combined experience text 
-        if experience_text:
-            matched, sim = _skill_matches(skill, experience_text, embedder, threshold)
-            max_similarity = max(max_similarity,sim)
-            if matched and "Experience Section" not in matching_projects:
-                matching_projects.append("Experience Section")
-
-        #if current skill validated add skill & projects to validated_skills
-        if matching_projects:
-            validated_skills.append({'skill': skill, 'projects': matching_projects, 'similarity': max_similarity})
-            skill_project_mapping[skill] = matching_projects
+        skill_project_mapping[skill] = evidence[skill]
+        if evidence[skill]:
+            validated_skills.append({'skill': skill, 'projects': evidence[skill], 'similarity': similarity[skill]})
         else:
             unvalidated_skills.append(skill)
-            skill_project_mapping[skill] = []
-
 
     validation_percentage = len(validated_skills) / len(skills)
     validation_score       = validation_percentage * 15.0
@@ -205,7 +335,7 @@ def _calc_formatting_score(parsed_resume: Dict, text:str) -> float:
     exp_entries = [e for e in parsed_resume.get("experience", []) if isinstance(e, dict)]
     edu_entries =  [e for e in parsed_resume.get("education", []) if isinstance(e, dict)]
     skills = parsed_resume.get("skills", [])
-    summary = parsed_resume.get("professional_summary")
+    summary = parsed_resume.get("professional_summary") or ""
     proj_entries = [p for p in parsed_resume.get("projects" , []) if isinstance(p, dict)]
 
     if exp_entries and any(e.get('job_title') or e.get('description') for e in exp_entries):
@@ -236,7 +366,7 @@ def _calc_formatting_score(parsed_resume: Dict, text:str) -> float:
 
 #Keyword calculator - score
 #awards additional points for matching resume terms against JD keywors, cap at 25
-def _calc_keywords_score(resume_keywords: List[str] , skills: List[str], jd_keywords: Optional[List][str]=None) -> float:
+def _calc_keywords_score(resume_keywords: List[str] , skills: List[str], jd_keywords: Optional[List[str]]=None) -> float:
     score=0.0
 
     score += _tier_score(len(resume_keywords), [(20,10.0),(15,8.0),(10,6.0),(5,4.0),(3,2.0)])
@@ -253,29 +383,24 @@ def _calc_keywords_score(resume_keywords: List[str] , skills: List[str], jd_keyw
 
     return min(25.0, max(0.0, score))
 
-#Content quality score - action verbs, grammar
+#Content quality score (max 25) - action verbs (10 pts), quantified achievements (5 pts), grammar (10 pts)
+#Grammar checking is not implemented yet. When it is unavailable it is left out and the other 15 points
+#are scaled up to the full 25, instead of handing every resume 10 free grammar points.
 def _calc_content_score(
         text:str,
         action_verbs: list[str],
         grammar_results: Dict
 ) -> float:
-    score =0.0
+    verbs_pts = _tier_score(len(action_verbs), [(15,10.0),(10,8.0),(7,6.0),(5,4.0),(3,2.0)])
 
-    score += _tier_score(len(action_verbs), [(15,10.0),(10,8.0),(7,6.0),(5,4.0),(3,2.0)])
+    achievement_count = sum(len(re.findall(p, text, re.IGNORECASE)) for p in QUANTIFIED_PATTERNS)
+    achievements_pts = _tier_score(achievement_count, [(10,5.0),(7,4.0),(5,3.0),(3,2.0),(1,1.0)])
 
-    number_patterns = [
-        r'\d+%',
-        r'\$\d+',
-        r'\d+[kKmMbB]',
-        r'\d+\s*(?:users|customers|clients|projects|hours|days|months|years)',
-        r'(?:increased|decreased|improved|reduced|grew|saved)\s+(?:by\s+)?\d+',
-    ]
-
-    achievement_count = sum(len(re.findall(p, text, re.IGNORECASE)) for p in number_patterns)
-    score += _tier_score(achievement_count, [(10,5.0),(7,4.0),(5,3.0),(3,2.0),(1,1.0)])
-
-    grammar_penalty = grammar_results.get('penalty_applied', 0.0)
-    score += max(0.0, 10.0 - grammar_penalty / 2.0)
+    if grammar_results.get('_component_status') == 'unavailable':
+        score = (verbs_pts + achievements_pts) / 15.0 * 25.0
+    else:
+        grammar_penalty = grammar_results.get('penalty_applied', 0.0)
+        score = verbs_pts + achievements_pts + max(0.0, 10.0 - grammar_penalty / 2.0)
 
     return min(25.0, max(0.0, score))
 
@@ -289,7 +414,7 @@ def _calc_skill_validation_score(validation_results: Dict) -> float:
 def _calc_ats_compatibility_score(text: str, location_results: Dict, parsed_resume:Dict) -> float:
     score=15.0
 
-    #deduction 1 - location privacy
+    #deduction 1 - location privacy (street address / postal code / too many place names)
     score -= location_results.get("penalty_applied", 0.0)
 
     #deduction 2 - concerns/unusual characters
@@ -301,7 +426,7 @@ def _calc_ats_compatibility_score(text: str, location_results: Dict, parsed_resu
     edu_entries  = [e for e in parsed_resume.get('education', [])  if isinstance(e, dict)]
     skills_count = len(parsed_resume.get('skills', []))
 
-    exp_desc_len = sum(len(e.get('description', '')) for e in exp_entries)
+    exp_desc_len = sum(len(e.get('description') or '') for e in exp_entries)
     edu_desc_len = sum(len((e.get('degree') or '') + (e.get('institution') or '')) for e in edu_entries)  # Handle None to prevent string concatenation errors
 
     #deduction 3 - short sections 
@@ -324,6 +449,7 @@ def _calc_ats_compatibility_score(text: str, location_results: Dict, parsed_resu
 #   Orchestartor   #
 ####################
 #Score aggregation and final interpretation 
+#overall = sum of the five component scores (max 100) minus the job description keyword-gap penalty
 def calculate_overall_score(
     text: str,
     parsed_resume: Dict,
@@ -337,66 +463,27 @@ def calculate_overall_score(
     experience_months: int = 0,
 ) -> Dict:
 
-    #calls each function
-    formatting_score        = _calc_formatting_score(parsed_resume, text)
-    keywords_score          = _calc_keywords_score(keywords, skills, jd_keywords)
-    content_score           = _calc_content_score(text, action_verbs, grammar_results)
-    skill_validation_score  = _calc_skill_validation_score(skill_validation_results)
-    ats_compatibility_score = _calc_ats_compatibility_score(text, location_results, parsed_resume)
+    #calls each function - every score is already capped at its own maximum
+    formatting_score        = _calc_formatting_score(parsed_resume, text)          # out of 20
+    keywords_score          = _calc_keywords_score(keywords, skills, jd_keywords)  # out of 25
+    content_score           = _calc_content_score(text, action_verbs, grammar_results)  # out of 25
+    skill_validation_score  = _calc_skill_validation_score(skill_validation_results)    # out of 15
+    ats_compatibility_score = _calc_ats_compatibility_score(text, location_results, parsed_resume)  # out of 15
 
-    COMPONENT_MAX = {
-        'formatting': 20.0, 'keywords': 25.0, 'content': 25.0,
-        'skill_validation': 15.0, 'ats_compatibility': 15.0,
-    }
-
-    #converts each component to a percentage 
-    formatting_pct        = (formatting_score        / COMPONENT_MAX['formatting'])        * 100.0
-    keywords_pct          = (keywords_score          / COMPONENT_MAX['keywords'])          * 100.0
-    content_pct           = (content_score           / COMPONENT_MAX['content'])           * 100.0
-    skill_validation_pct  = (skill_validation_score  / COMPONENT_MAX['skill_validation'])  * 100.0
-    ats_compatibility_pct = (ats_compatibility_score / COMPONENT_MAX['ats_compatibility']) * 100.0
-
-    #keywords and skill validation together 40%
-    skills_keywords_pct = (keywords_pct * 0.6) + (skill_validation_pct * 0.4)
-
-    #total in base_score
-    base_score = (
-        skills_keywords_pct   * 0.40 +
-        content_pct           * 0.30 +
-        formatting_pct        * 0.15 +
-        ats_compatibility_pct * 0.15
+    #The maximums add up to exactly 100, so the overall score is simply their sum.
+    score = (
+        formatting_score
+        + keywords_score
+        + content_score
+        + skill_validation_score
+        + ats_compatibility_score
     )
 
+    #Location privacy is already deducted inside the ATS compatibility score, and grammar is handled
+    #inside the content score, so the only extra adjustment is the job description keyword gap.
     penalties = {}
     bonuses   = {}
-    score     = base_score
 
-    #Extra bonus/duduction from score 
-
-    #record any penalties into the penalties dictionary
-    if grammar_results.get('penalty_applied', 0.0) > 0:
-        penalties['grammar'] = grammar_results['penalty_applied']
-
-    if location_results.get('penalty_applied', 0.0) > 0:
-        penalties['location_privacy'] = location_results['penalty_applied']
-
-    #get validation percentage 
-    validation_pct = skill_validation_results.get('validation_percentage', 0.0)
-
-    #add bonus
-    if validation_pct >= 0.9:
-        bonuses['excellent_skill_validation'] = 2.0
-        score += 2.0
-    elif validation_pct >= 0.8:
-        bonuses['good_skill_validation'] = 1.0
-        score += 1.0
-
-    #add grammar bonus
-    if grammar_results.get('total_errors', 0) == 0:
-        bonuses['perfect_grammar'] = 1.0
-        score += 1.0
-
-    #check for missing JD keywords
     if jd_keywords and len(jd_keywords) > 0:
         #combine resume keywords and skills
         all_resume_terms = list(set((keywords or []) + (skills or [])))
@@ -408,13 +495,12 @@ def calculate_overall_score(
         #deduct based on missing %
         if missing_pct > 0.7:
             penalties['missing_jd_keywords'] = 15.0
-            score -= 15.0
         elif missing_pct > 0.5:
             penalties['missing_jd_keywords'] = 10.0
-            score -= 10.0
         elif missing_pct > 0.3:
             penalties['missing_jd_keywords'] = 5.0
-            score -= 5.0
+
+    score -= sum(penalties.values())
 
     #final score within 0-100
     overall_score = min(100.0, max(0.0, score))
@@ -430,78 +516,6 @@ def calculate_overall_score(
         'overall_interpretation':  interpretation,
         'penalties':               penalties,
         'bonuses':                 bonuses,}
-
-##########################
-#   FEEDBACK FUNCTIONS   #
-##########################
-
-#builds a list of positive observations based on component score threhold and grammar results
-def generate_stengths(score_results, skill_validation_results, grammar_results) -> List[str] :
-    strengths = []
-
-    if score_results["formatting_score"] >= 16:
-        strengths.append("Well-structured with clear sections and bullet points ")
-    if score_results['keywords_score']          >= 20:
-        strengths.append(' Strong keyword optimization and skills presence')
-    if score_results['content_score']           >= 20:
-        strengths.append(' Excellent use of action verbs and quantifiable achievements')
-    if score_results['skill_validation_score']  >= 12:
-        pct = skill_validation_results.get('validation_percentage', 0) * 100
-        strengths.append(f' {pct:.0f}% of skills are validated by projects')
-    if score_results['ats_compatibility_score'] >= 13:
-        strengths.append(' Excellent ATS compatibility with clean formatting')
-    if grammar_results.get('total_errors', 0)   == 0:
-        strengths.append(' Error-free grammar and spelling')
-
-    if not strengths:
-        strengths.append('Your resume has potential - focus on the recommendations below')
-    return strengths
-
-
-#Critical issues that could cause ATS rejection
-# Flags grammar errors, high privacy risk and low fomatting, keyword or skill validation scores
-def generate_critical_issues(
-        score_results: Dict, 
-        grammar_results:Dict, 
-        location_results: Dict,
-) -> List[str] : 
-    issues = []
-
-    critical_errors = len(grammar_results.get("critical_errors", []))
-    if critical_errors > 0:
-        issues.append(f' {critical_errors} critical grammar/spelling error(s) detected')
-    if location_results.get('privacy_risk') == 'high':
-        issues.append('High privacy risk: Remove detailed location information')
-    if score_results['formatting_score']       < 10:
-        issues.append(' Poor formatting: Add clear sections and bullet points')
-    if score_results['keywords_score']         < 12:
-        issues.append(' Insufficient keywords and skills')
-    if score_results['skill_validation_score'] < 7:
-        issues.append(' Most skills lack supporting evidence in projects')
-
-    return issues
-
-#Actionable improvements to enhance ATS performance 
-def generate_improvements(
-    score_results: Dict,
-    skill_validation_results: Dict,
-) -> List[str]:
-    improvements = []
-
-    #Suggest if fall within certain middle ranges 
-    if 12 <= score_results['formatting_score']       < 16:
-        improvements.append('Add more bullet points and improve section organization')
-    if 14 <= score_results['keywords_score']          < 20:
-        improvements.append('Include more relevant keywords and technical skills')
-    if 14 <= score_results['content_score']           < 20:
-        improvements.append('Add more quantifiable achievements and action verbs')
-    if 7  <= score_results['skill_validation_score']  < 12:
-        unvalidated_count = len(skill_validation_results.get('unvalidated_skills', []))
-        improvements.append(f'Validate {unvalidated_count} skill(s) by adding relevant project details')
-    if 9  <= score_results['ats_compatibility_score'] < 13:
-        improvements.append('Simplify formatting for better ATS compatibility')
-
-    return improvements
 
 #Interpretation of overall score - maps overall score to a description
 def _generate_score_interpretation(overall_score: float) -> str:

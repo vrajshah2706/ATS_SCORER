@@ -8,7 +8,7 @@ import streamlit as st
 from frontend.components._helpers import get_score_color, get_score_emoji
 
 
-# Component max scores match backend/core/config.py SCORE_WEIGHTS.
+# Component max scores match the maximums in backend/services/ats_scorer.py (they add up to 100).
 # (Backend returns each component's score on its own scale, not 0–100.)
 COMPONENTS = [
     ("Formatting",        "formatting",        20, "📝"),
@@ -70,3 +70,12 @@ def display_score_breakdown(analysis: Dict[str, Any]) -> None:
             )
             st.markdown(f"**{value:.0f}/{max_score}**")
             st.markdown("")
+
+    #Job description keyword gap: subtracted from the sum of the five components above, so it is shown
+    #explicitly - otherwise the overall score would not match the bars. Only present when a JD was used.
+    jd_penalty = float(analysis.get("jd_penalty") or 0)
+    if jd_penalty > 0:
+        st.warning(
+            f"➖ **JD keyword gap: −{jd_penalty:.0f} points.** Many keywords from the job description "
+            "are missing from your resume, so this is subtracted from the total of the five components above."
+        )

@@ -16,25 +16,46 @@ logger = logging.getLogger('ats_resume_scorer')
 #Load environment variables
 try:
     from dotenv import load_dotenv
-    load_dotenv(Path(__file__).resolve().parents[2] / '.env')
+    FRONTEND_ENV = Path(__file__).resolve().parents[1] / '.env'
+
+    load_dotenv(FRONTEND_ENV, override=True)
+
+    logger.info(f"Frontend .env exists: {FRONTEND_ENV.exists()}")
+    logger.info(f"Frontend .env path: {FRONTEND_ENV}")
 except ImportError:
     pass
 
 # Read configuration from environment or Streamlit secrets
 def _secret(key: str, section: str = 'supabase') -> str:
     """Read from env first, then fall back to st.secrets[section][key]."""
-    val = os.getenv(key, '')
+    # 1. Check environment variables
+    val = os.getenv(key, '').strip()
     if val:
         return val
+
+    # 2. Check Streamlit secrets
     try:
-        return st.secrets[section][key]
-    except (KeyError, FileNotFoundError, AttributeError):
+        # Nested structure: [supabase]
+        val = st.secrets.get(section, {}).get(key, '')
+        if val:
+            return str(val).strip()
+
+        # Root-level structure
+        val = st.secrets.get(key, '')
+        if val:
+            return str(val).strip()
+
+    except Exception as exc:
+        logger.warning(f"Could not read Streamlit secret {key}: {exc}")
         return ''
 
 
 SUPABASE_URL = _secret('SUPABASE_URL')
 SUPABASE_ANON_KEY = _secret('SUPABASE_ANON_KEY')
-
+AUTH_REDIRECT_URL = _secret(
+    'redirect_url',
+    section='auth'
+)
 
 
 def _missing_config() -> str | None:
@@ -86,8 +107,16 @@ def sign_up_with_password(email: str, password: str) -> Dict[str, Any]:
     if err:
         return {'error': err}
     try:
+        redirect_url = AUTH_REDIRECT_URL or "http://localhost:8501"
+
         #Calls supabase
-        resp = get_client().auth.sign_up({'email': email, 'password': password})
+        resp = get_client().auth.sign_up({
+                    'email': email,
+                    'password': password,
+                    'options': {
+                        'email_redirect_to': redirect_url
+                    }
+                })        
         # 1. session/user exist -> immediate successful signup
         if resp.session and resp.user:
             return _session_dict(resp.session, resp.user)

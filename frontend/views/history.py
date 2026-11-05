@@ -3,14 +3,24 @@ Implements Streamlit page that displays a signed in user's past resume analyses
 """
 import requests
 import streamlit as st
+from datetime import datetime
 
 from frontend.services import api_client
+
+
+#Turns the database timestamp (UTC, ISO format) into a readable date in the computer's local time zone.
+#If it cannot be parsed, the original text is shown unchanged.
+def _format_timestamp(raw: str) -> str:
+    try:
+        return datetime.fromisoformat(raw.replace("Z", "+00:00")).astimezone().strftime("%d %b %Y, %I:%M %p")
+    except (ValueError, AttributeError):
+        return raw
 
 
 #Display a different message depending on th type of error.
 def _show_backend_error(exc: Exception) -> None:
     if isinstance(exc, requests.ConnectionError):
-        st.error("Could not reach the backend. Is it running on port 8000?")
+        st.error("Could not reach the backend. Is it running? (see the README for how to start it)")
     elif isinstance(exc, requests.HTTPError) and exc.response is not None:
         st.error(f"Backend returned {exc.response.status_code}: {exc.response.text}")
     else:
@@ -56,7 +66,7 @@ def render() -> None:
         #gets fields
         filename = entry.get("filename", "resume")
         ats_score = float(entry.get("ats_score", 0))
-        created_at = entry.get("created_at", "")
+        created_at = _format_timestamp(entry.get("created_at", ""))
         analysis = entry.get("analysis_result", {}) or {}
 
         component_scores = analysis.get("component_scores", {}) or {}
@@ -80,6 +90,11 @@ def render() -> None:
 
             if jd_comparison:
                 st.markdown(f"**JD Match:** {jd_comparison.get('match_percentage', 0):.0f}%")
+
+            #Penalty subtracted from the five components for missing job description keywords (saved with the analysis)
+            jd_penalty = float(analysis.get("jd_penalty") or 0)
+            if jd_penalty > 0:
+                st.markdown(f"**JD keyword gap:** −{jd_penalty:.0f} points (already included in the overall score)")
 
             entry_id = entry.get("id")
             #If the entry has an ID, show a delete button. If the user clicks the delete button,

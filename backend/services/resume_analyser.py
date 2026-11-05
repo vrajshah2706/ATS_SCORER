@@ -5,12 +5,11 @@
 import spacy
 from sentence_transformers import SentenceTransformer
 from typing import Dict, List, Optional
-from backend.models.schemas import IssueDetail
 from backend.services.groq_parser import parse_resume, parse_job_description
 from backend.services.jd_matcher import compare_resume_with_jd
 from backend.services.feedback_engine import analyse_issues, generate_issues_summary
 from backend.services.recommendation_engine import generate_all_recommendations, format_recommendations_for_api
-from backend.services.ats_scorer import calculate_overall_score, validate_skills_with_projects
+from backend.services.ats_scorer import calculate_overall_score, validate_skills_with_projects, detect_location_info
 
 
 def analyse_full_resume(
@@ -86,9 +85,19 @@ def analyse_full_resume(
     from backend.utils.file_utils import (
         get_default_grammar_results, get_default_location_results,
     )
-    #Get default grammar and location results and passed to scoring
+    #Grammar checking is not implemented yet, so the default "unavailable" result is used.
+    #The scorer recognises this and leaves grammar out of the content score instead of awarding free points.
     grammar_results  = get_default_grammar_results()
-    location_results = get_default_location_results()
+
+    #Detect street addresses, postal codes and excessive location detail (privacy risk).
+    #Skills/keywords are ignored so tech terms spaCy mistakes for place names (e.g. "Java") are not counted.
+    try:
+        location_results = detect_location_info(
+            resume_text, nlp, ignore_terms=list(skills) + list(keywords)
+        )
+    except Exception as exc:
+        logger.warning(f"Location detection failed (non-blocking): {exc}")
+        location_results = get_default_location_results()
 
     #Calculating overall score
     scores = calculate_overall_score(
@@ -114,6 +123,7 @@ def analyse_full_resume(
         skill_validation=skill_validation,
         scores=scores,
         contact_info=contact_info,
+        location_results=location_results,
     )
 
     #Getting Summary of the issues found
@@ -202,6 +212,8 @@ def analyse_full_resume(
         "strengths": _generate_strengths(parsed_resume, skills, projects, action_verbs, skill_validation, scores),
         "interpretation":    scores.get('overall_interpretation', ''),
         "suggestions":       suggestions,
+        #Points subtracted because many job description keywords are missing (0 when no JD is supplied)
+        "jd_penalty":        scores.get('penalties', {}).get('missing_jd_keywords', 0.0),
         "skill_validation_details": skill_validation_details,
         "experience_months": experience_months,
     }

@@ -36,8 +36,6 @@ SUPPPORTED_MIME_TYPES = {
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
 }
 
-SUPPORTED_FILE_EXTENSION = {'.pdf', '.doc', '.docx'}
-
 #Model declaration  
 SPACY_MODEL_PRIMARY = os.getenv(
     "SPACY_MODEL",
@@ -48,15 +46,6 @@ SENTENCE_TRANSFORMER_MODEL = os.getenv(
     "SENTENCE_TRANSFORMER_MODEL",
     str(BASE_DIR / "models" / "fine_tuned_model")
 )
-
-#Score component weights - this is a business logic treated as config so that it can be easily changed in the future
-SCORE_WEIGHTS = {
-    "formatting" : 20 , "keywords": 25, "content":25, 
-    "skill_validation": 15, "ats_compatibility": 15
-}
-
-JD_KEYWORDS_WEIGHT = 0.6 # Weight for job description keywords match
-JD_SEMENATIC_WEIGHT = 0.4 # Weight for job description semantic similarity
 
 SUPABASE_URL       = os.getenv('SUPABASE_URL', '')
 SUPABASE_KEY       = os.getenv('SUPABASE_KEY', '')          # service_role — DB writes (bypasses RLS)

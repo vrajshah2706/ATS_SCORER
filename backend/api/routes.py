@@ -3,30 +3,15 @@
 - groups under the /api/v1 prefix.
 """
 import logging
-from typing import List, Optional
 
-from fastapi import APIRouter, HTTPException, File, Form , Header, Request, UploadFile, Depends
+from fastapi import APIRouter, HTTPException, File, Form, Request, UploadFile, Depends
 from backend.models.schemas import AnalysisResponse, ComponentScores, JDComparison, SkillValidationDetails
-#Default values 
-from backend.utils.file_utils import (
-    get_default_grammar_results,
-    get_default_location_results,
-    get_default_skill_validation_results,
-)
 from backend.api.auth import get_current_user
 
 logger = logging.getLogger("ats_resume_scorer")
 
 #Use Prefix to define route e.g " /api/v1/'x' "
 router = APIRouter(prefix="/api/v1", tags=["Analysis"])
-
-#Removing any emojis
-def _clean(text:str) -> str:
-    for prefix in ('✅', '🌟', '❌', '⚠️', '📝', '🔴', '🟡', '🟢', '🟠', '👍'):
-        text = text.lstrip(prefix)
-    return text.strip()
-
-
 
 ############################# 
 # Overview of All Endpoints #
@@ -57,8 +42,6 @@ async def analyse_resume(
     job_description: str = Form('', description="Job description text (optional)"),
     user_id: str = Depends(get_current_user),
 ): 
-    warnings: List[str] = []
-
     #Uses NLP and Embedding model stored in request.app.state
     nlp = request.app.state.nlp
     embedder = request.app.state.embedder 
@@ -69,11 +52,7 @@ async def analyse_resume(
         file_name= resume.filename or "resume" #if filename none, name it to resume  
 
         #parsing the resume file
-        from backend.services.resume_parser import (
-            FileParsingError,
-            FileValidationError,
-            parse_resume_file
-        )
+        from backend.services.resume_parser import parse_resume_file
 
         resume_text, _metadata = parse_resume_file(file_bytes, file_name)
         logger.info(f"Parsed  '{file_name}': {len(resume_text)} chars extracted")
@@ -101,7 +80,6 @@ async def analyse_resume(
         logger.error(f"Full analysis pipeline failed: {exc}")
         raise HTTPException(status_code=500, detail=f"Analysis pipeline failed: {exc}")
 
-    from backend.models.schemas import ComponentScores
     #Extract jd_comparison details
     jd_comparison_result = None
     if result.get("jd_comparison"):
@@ -138,6 +116,7 @@ async def analyse_resume(
             if str(fb.severity_level).lower() in ('high', 'critical')
         ],
         suggestions=result.get('suggestions', []),
+        jd_penalty=result.get('jd_penalty', 0.0),
         jd_match_analysis=jd_comparison_result,
         skill_validation_details=skill_val_details,
 

@@ -1,12 +1,11 @@
 """
 - Converts rendered HTML (from report_generator) into one downloadable PDF
 """
-import io
 import logging
 
-#import weasyprint's html and css classes
+#import weasyprint's html class
 try:
-    from weasyprint import HTML, CSS
+    from weasyprint import HTML
     WEASYPRINT_INSTALLED = True
 except ImportError:
     WEASYPRINT_INSTALLED = False

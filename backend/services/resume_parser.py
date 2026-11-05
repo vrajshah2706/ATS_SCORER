@@ -9,7 +9,6 @@ import PyPDF2
 from backend.utils.file_utils import (
     FileParsingError,
     TextExtractionError, 
-    FileUploadError,
     log_error,
     log_warning,
     log_info,

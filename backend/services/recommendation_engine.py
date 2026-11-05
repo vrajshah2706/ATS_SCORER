@@ -171,12 +171,13 @@ def generate_location_recommendations(location_results: Dict) -> List[Recommenda
     detected_locations = location_results.get("detected_locations", [])
     privacy_risk = location_results.get("privacy_risk", None)
 
-    #No privacy risk or detected locations then return 
-    if privacy_risk == "none" or not detected_locations:
+    #Only a real privacy risk (full address / postal code, or many place names) gets a recommendation.
+    #A city or two in the header is normal and is deliberately left alone.
+    if privacy_risk not in ("high", "medium") or not detected_locations:
         return recommendations
 
     addresses = [loc for loc in  detected_locations if loc.get("type") == "address"]
-    zip_codes = [loc for loc in detected_locations if loc.get("type") == "zip"]
+    zip_codes = [loc for loc in detected_locations if loc.get("type") == "postal_code"]
 
     action_items = []
 
@@ -184,29 +185,23 @@ def generate_location_recommendations(location_results: Dict) -> List[Recommenda
     for addr in addresses[:2]:
         action_items.append(f"Remove full address: '{addr.get("text","")}'")
     for z in zip_codes[:2]:
-        action_items.append(f"Remove zip code: '{z.get("text", "")}'")
-    action_items.append("Kepp only 'City, State' in your contact header")
+        action_items.append(f"Remove postal code: '{z.get("text", "")}'")
+    action_items.append("Keep only 'City, State' in your contact header")
 
     # Assigning priority, impact and description base on privacy_risk
     if privacy_risk == "high":
         priority = Priority.CRITICAL
         impact = 5.0
         description = (
-            "Your resume contains detailed locations information that poses a privacy risk."
-            "Full addresses and zip codes are unnecessary and can be used to identify your location"
+            "Your resume contains detailed location information that poses a privacy risk. "
+            "Full addresses and postal codes are unnecessary and can be used to identify your location."
         )
-    elif privacy_risk == 'medium':
+    else:  #medium - "low" and "none" risk already returned above, so only high/medium reach here
         priority    = Priority.HIGH
         impact      = 3.0
         description = (
             "Your resume contains multiple location mentions. Consider simplifying to just "
             "'City, State' in your contact header."
-        )
-    else:
-        priority    = Priority.MEDIUM
-        impact      = 2.0
-        description = (
-            'Minor location information detected. Consider reviewing for unnecessary location details.'
         )
 
     recommendations.append(Recommendation(
@@ -477,28 +472,3 @@ def format_recommendations_for_api(recommendations_result: Dict) -> List[Dict]:
         for rec in recommendations_result.get('all_recommendations', [])
     ]
 
-#Short message for frontend based on total and severity of the recommendations
-def get_recommendation_summary(recommendations_result: Dict) -> str:
-    total       = recommendations_result.get('total_count', 0)
-    critical    = len(recommendations_result.get('critical_recommendations', []))
-    high        = len(recommendations_result.get('high_recommendations', []))
-    improvement = recommendations_result.get('estimated_improvement', 0.0)
-
-    if total == 0:
-        return 'Excellent! No major recommendations. Your resume is well-optimized.'
-
-    if critical > 0:
-        return (
-            f'Found {total} recommendation(s) including {critical} critical issue(s). '
-            f'Addressing these could improve your score by up to {improvement:.0f} points.'
-        )
-    elif high > 0:
-        return (
-            f'Found {total} recommendation(s) including {high} high-priority item(s). '
-            f'Addressing these could improve your score by up to {improvement:.0f} points.'
-        )
-    else:
-        return (
-            f'Found {total} recommendation(s) for improvement. '
-            f'Addressing these could improve your score by up to {improvement:.0f} points.'
-        )

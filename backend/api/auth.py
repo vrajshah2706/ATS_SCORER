@@ -4,6 +4,8 @@
 """
 import logging
 import jwt
+import ssl
+import certifi
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
@@ -20,12 +22,29 @@ _jwks_client: jwt.PyJWKClient | None = None
 
 def _get_jwks_client() -> jwt.PyJWKClient | None:
     global _jwks_client
+
     if _jwks_client is not None:
         return _jwks_client
+
     if not SUPABASE_URL:
         return None
-    jwks_url = f"{SUPABASE_URL.rstrip('/')}/auth/v1/.well-known/jwks.json"
-    _jwks_client = jwt.PyJWKClient(jwks_url, cache_keys=True, lifespan=3600)
+
+    jwks_url = (
+        f"{SUPABASE_URL.rstrip('/')}"
+        "/auth/v1/.well-known/jwks.json"
+    )
+
+    ssl_context = ssl.create_default_context(
+        cafile=certifi.where()
+    )
+
+    _jwks_client = jwt.PyJWKClient(
+        jwks_url,
+        cache_keys=True,
+        lifespan=3600,
+        ssl_context=ssl_context
+    )
+
     return _jwks_client
 
 

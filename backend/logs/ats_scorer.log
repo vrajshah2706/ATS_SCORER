@@ -42,3 +42,300 @@
 2026-10-31 16:40:37,695 - INFO - Loading SentenceTransformer: C:\Users\vrajs\OneDrive\Desktop\ATS_Resume\ATS_SCORER\backend\core\models\fine_tuned_model
 2026-10-31 16:40:46,112 - INFO - Loaded SentenceTransformer: C:\Users\vrajs\OneDrive\Desktop\ATS_Resume\ATS_SCORER\backend\core\models\fine_tuned_model
 2026-10-31 16:40:46,112 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 15:30:46,964 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 15:30:46,965 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 15:31:09,291 - WARNING - en_core_web_md not found - falling back to en_core_web_sm
+2026-11-03 15:32:13,178 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 15:32:13,178 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 15:32:15,189 - INFO - Loaded en_core_web_md
+2026-11-03 15:32:15,189 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 15:32:24,777 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 15:32:24,783 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 15:43:15,413 - INFO - Shutting down the api!!
+2026-11-03 15:43:15,961 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 15:43:15,961 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 15:43:17,870 - INFO - Loaded en_core_web_md
+2026-11-03 15:43:17,870 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 15:43:22,007 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 15:43:22,009 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 15:46:40,516 - INFO - Shutting down the api!!
+2026-11-03 15:46:40,975 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 15:46:40,975 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 15:46:42,698 - INFO - Loaded en_core_web_md
+2026-11-03 15:46:42,698 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 15:46:46,758 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 15:46:46,759 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 15:49:58,265 - WARNING - JWT verification failed: Fail to fetch data from the url, err: "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1077)>"
+2026-11-03 15:50:20,471 - WARNING - JWT verification failed: Fail to fetch data from the url, err: "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1077)>"
+2026-11-03 15:50:21,478 - WARNING - JWT verification failed: Fail to fetch data from the url, err: "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1077)>"
+2026-11-03 15:50:30,117 - WARNING - JWT verification failed: Fail to fetch data from the url, err: "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1077)>"
+2026-11-03 15:50:35,803 - WARNING - JWT verification failed: Fail to fetch data from the url, err: "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1077)>"
+2026-11-03 15:58:58,312 - WARNING - JWT verification failed: Fail to fetch data from the url, err: "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1077)>"
+2026-11-03 16:11:26,068 - INFO - Shutting down the api!!
+2026-11-03 16:11:26,513 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 16:11:26,514 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 16:11:28,293 - INFO - Loaded en_core_web_md
+2026-11-03 16:11:28,294 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:11:32,543 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:11:32,543 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 16:13:32,284 - INFO - Shutting down the api!!
+2026-11-03 16:13:32,698 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 16:13:32,698 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 16:13:34,545 - INFO - Loaded en_core_web_md
+2026-11-03 16:13:34,545 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:13:38,735 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:13:38,742 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 16:14:18,032 - INFO - Shutting down the api!!
+2026-11-03 16:14:18,444 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 16:14:18,444 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 16:14:20,244 - INFO - Loaded en_core_web_md
+2026-11-03 16:14:20,245 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:14:24,063 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:14:24,063 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 16:15:06,709 - INFO - Shutting down the api!!
+2026-11-03 16:15:07,055 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 16:15:07,055 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 16:15:08,596 - INFO - Loaded en_core_web_md
+2026-11-03 16:15:08,596 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:15:12,282 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:15:12,282 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 16:25:28,621 - INFO - Shutting down the api!!
+2026-11-03 16:25:33,577 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 16:25:33,577 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 16:25:37,219 - INFO - Loaded en_core_web_md
+2026-11-03 16:25:37,219 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:25:54,774 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:25:54,784 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 16:26:36,728 - ERROR - File parsing failed: failed to find libmagic.  Check your installation
+2026-11-03 16:30:39,669 - INFO - Shutting down the api!!
+2026-11-03 16:31:45,013 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 16:31:45,014 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 16:31:48,884 - INFO - Loaded en_core_web_md
+2026-11-03 16:31:48,884 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:31:56,719 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:31:56,721 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 16:32:42,467 - INFO - parse_resume_file: Parsing file: Vraj_Resume.pdf
+2026-11-03 16:32:42,526 - INFO - parse_resume_file: Extracted 3787 chars from Vraj_Resume.pdf
+2026-11-03 16:32:42,526 - INFO - Parsed  'Vraj_Resume.pdf': 3787 chars extracted
+2026-11-03 16:32:42,903 - ERROR - Full analysis pipeline failed: Error code: 404 - {'error': {'message': 'The model `llama-3.3-70b-versatile` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'code': 'model_not_found'}}
+2026-11-03 16:36:06,196 - INFO - Shutting down the api!!
+2026-11-03 16:36:06,658 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 16:36:06,658 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 16:36:08,768 - INFO - Loaded en_core_web_md
+2026-11-03 16:36:08,768 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:36:12,909 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:36:12,910 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 16:36:19,537 - INFO - parse_resume_file: Parsing file: Vraj_Resume.pdf
+2026-11-03 16:36:19,592 - INFO - parse_resume_file: Extracted 3787 chars from Vraj_Resume.pdf
+2026-11-03 16:36:19,592 - INFO - Parsed  'Vraj_Resume.pdf': 3787 chars extracted
+2026-11-03 16:36:26,805 - INFO - Groq parsed summary: 'Software Engineering student with experience in full-stack web development, Java, Python, C++, SQL, '
+2026-11-03 16:36:26,805 - INFO - Groq parsed skills count: 33
+2026-11-03 16:36:26,805 - INFO - Groq parsed experience count: 1
+2026-11-03 16:36:36,503 - ERROR - Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://krbyklemshoehawzhdcu.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-11-03 16:43:13,720 - INFO - Shutting down the api!!
+2026-11-03 16:46:00,405 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 16:46:00,405 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 16:46:02,244 - INFO - Loaded en_core_web_md
+2026-11-03 16:46:02,244 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:46:06,355 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:46:06,358 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 16:47:32,566 - INFO - parse_resume_file: Parsing file: Vraj_Resume.pdf
+2026-11-03 16:47:32,625 - INFO - parse_resume_file: Extracted 3787 chars from Vraj_Resume.pdf
+2026-11-03 16:47:32,625 - INFO - Parsed  'Vraj_Resume.pdf': 3787 chars extracted
+2026-11-03 16:47:40,307 - INFO - Groq parsed summary: 'Software Engineering student with experience in full-stack web development, Java, Python, C++, SQL, '
+2026-11-03 16:47:40,307 - INFO - Groq parsed skills count: 33
+2026-11-03 16:47:40,307 - INFO - Groq parsed experience count: 1
+2026-11-03 16:47:46,727 - ERROR - Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://krbyklemshoehawzhdcu.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-11-03 16:51:55,651 - INFO - Shutting down the api!!
+2026-11-03 16:51:57,627 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 16:51:57,627 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 16:51:59,574 - INFO - Loaded en_core_web_md
+2026-11-03 16:51:59,575 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:52:03,560 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:52:03,560 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 16:53:35,526 - INFO - Shutting down the api!!
+2026-11-03 16:53:47,290 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 16:53:47,290 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 16:53:49,451 - INFO - Loaded en_core_web_md
+2026-11-03 16:53:49,451 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:53:54,572 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:53:54,579 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 16:57:05,793 - INFO - Shutting down the api!!
+2026-11-03 16:57:06,258 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 16:57:06,258 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 16:57:08,302 - INFO - Loaded en_core_web_md
+2026-11-03 16:57:08,302 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:57:13,304 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 16:57:13,306 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 16:57:49,640 - INFO - parse_resume_file: Parsing file: Vraj_Resume.pdf
+2026-11-03 16:57:49,696 - INFO - parse_resume_file: Extracted 3787 chars from Vraj_Resume.pdf
+2026-11-03 16:57:49,697 - INFO - Parsed  'Vraj_Resume.pdf': 3787 chars extracted
+2026-11-03 16:57:57,094 - INFO - Groq parsed summary: 'Software Engineering student with experience in full-stack web development, Java, Python, C++, SQL, '
+2026-11-03 16:57:57,094 - INFO - Groq parsed skills count: 33
+2026-11-03 16:57:57,094 - INFO - Groq parsed experience count: 1
+2026-11-03 16:58:03,987 - ERROR - Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://krbyklemshoehawzhdcu.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-11-03 16:59:43,686 - INFO - Shutting down the api!!
+2026-11-03 16:59:54,707 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 16:59:54,707 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 16:59:56,654 - INFO - Loaded en_core_web_md
+2026-11-03 16:59:56,654 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 17:00:00,804 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 17:00:00,805 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 17:11:40,508 - INFO - parse_resume_file: Parsing file: Vraj_Resume.pdf
+2026-11-03 17:11:41,255 - INFO - parse_resume_file: Extracted 3787 chars from Vraj_Resume.pdf
+2026-11-03 17:11:41,255 - INFO - Parsed  'Vraj_Resume.pdf': 3787 chars extracted
+2026-11-03 17:11:48,604 - INFO - Groq parsed summary: 'Software Engineering student with experience in full-stack web development, Java, Python, C++, SQL, '
+2026-11-03 17:11:48,604 - INFO - Groq parsed skills count: 33
+2026-11-03 17:11:48,604 - INFO - Groq parsed experience count: 1
+2026-11-03 17:12:02,419 - ERROR - Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://krbyklemshoehawzhdcu.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-11-03 17:16:49,664 - INFO - parse_resume_file: Parsing file: CV Vraj.pdf
+2026-11-03 17:16:49,799 - INFO - parse_resume_file: Extracted 3851 chars from CV Vraj.pdf
+2026-11-03 17:16:49,799 - INFO - Parsed  'CV Vraj.pdf': 3851 chars extracted
+2026-11-03 17:16:56,420 - INFO - Groq parsed summary: 'self-disciplined, energetic and result oriented young professional seeking a position where I can co'
+2026-11-03 17:16:56,420 - INFO - Groq parsed skills count: 34
+2026-11-03 17:16:56,420 - INFO - Groq parsed experience count: 1
+2026-11-03 17:17:07,588 - ERROR - Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://krbyklemshoehawzhdcu.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-11-03 17:25:37,454 - INFO - Shutting down the api!!
+2026-11-03 17:28:26,891 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 17:28:26,891 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 17:28:28,912 - INFO - Loaded en_core_web_md
+2026-11-03 17:28:28,912 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 17:28:45,591 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 17:28:45,592 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 17:29:23,279 - INFO - parse_resume_file: Parsing file: Vraj_Resume.pdf
+2026-11-03 17:29:23,336 - INFO - parse_resume_file: Extracted 3787 chars from Vraj_Resume.pdf
+2026-11-03 17:29:23,336 - INFO - Parsed  'Vraj_Resume.pdf': 3787 chars extracted
+2026-11-03 17:29:31,114 - INFO - Groq parsed summary: 'Software Engineering student with experience in full-stack web development, Java, Python, C++, SQL, '
+2026-11-03 17:29:31,114 - INFO - Groq parsed skills count: 33
+2026-11-03 17:29:31,114 - INFO - Groq parsed experience count: 1
+2026-11-03 17:29:37,319 - ERROR - Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://krbyklemshoehawzhdcu.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-11-03 17:30:40,572 - INFO - parse_resume_file: Parsing file: Vraj_Resume.pdf
+2026-11-03 17:30:40,642 - INFO - parse_resume_file: Extracted 3787 chars from Vraj_Resume.pdf
+2026-11-03 17:30:40,642 - INFO - Parsed  'Vraj_Resume.pdf': 3787 chars extracted
+2026-11-03 17:30:48,404 - INFO - Groq parsed summary: 'Software Engineering student with experience in full-stack web development, Java, Python, C++, SQL, '
+2026-11-03 17:30:48,405 - INFO - Groq parsed skills count: 36
+2026-11-03 17:30:48,405 - INFO - Groq parsed experience count: 1
+2026-11-03 17:31:00,353 - ERROR - Failed to save analysis to Supabase: Client error '401 Unauthorized' for url 'https://krbyklemshoehawzhdcu.supabase.co/rest/v1/analyses'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+2026-11-03 17:45:58,840 - INFO - Shutting down the api!!
+2026-11-03 17:46:00,889 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-03 17:46:00,890 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-03 17:46:02,699 - INFO - Loaded en_core_web_md
+2026-11-03 17:46:02,699 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 17:46:06,783 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-03 17:46:06,785 - INFO - All models loaded. API is ready to serve requests.
+2026-11-03 17:46:31,274 - INFO - parse_resume_file: Parsing file: Vraj_Resume.pdf
+2026-11-03 17:46:31,333 - INFO - parse_resume_file: Extracted 3787 chars from Vraj_Resume.pdf
+2026-11-03 17:46:31,333 - INFO - Parsed  'Vraj_Resume.pdf': 3787 chars extracted
+2026-11-03 17:46:38,867 - INFO - Groq parsed summary: 'Software Engineering student with experience in full-stack web development, Java, Python, C++, SQL, '
+2026-11-03 17:46:38,867 - INFO - Groq parsed skills count: 33
+2026-11-03 17:46:38,867 - INFO - Groq parsed experience count: 1
+2026-11-03 17:46:45,447 - INFO - Saved analysis fro user 89eaea93-7fe5-4ad0-9062-5c30e8f4fe2a: 8
+2026-11-03 17:48:04,293 - INFO - parse_resume_file: Parsing file: CV Vraj.pdf
+2026-11-03 17:48:04,429 - INFO - parse_resume_file: Extracted 3851 chars from CV Vraj.pdf
+2026-11-03 17:48:04,429 - INFO - Parsed  'CV Vraj.pdf': 3851 chars extracted
+2026-11-03 17:48:10,710 - INFO - Groq parsed summary: 'self-disciplined, energetic and result oriented young professional seeking a position where I can co'
+2026-11-03 17:48:10,710 - INFO - Groq parsed skills count: 34
+2026-11-03 17:48:10,710 - INFO - Groq parsed experience count: 1
+2026-11-03 17:48:17,666 - INFO - Saved analysis fro user 89eaea93-7fe5-4ad0-9062-5c30e8f4fe2a: 9
+2026-11-03 17:58:13,466 - INFO - Shutting down the api!!
+2026-11-04 19:06:10,679 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-04 19:06:10,679 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-04 19:06:12,651 - INFO - Loaded en_core_web_md
+2026-11-04 19:06:12,651 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-04 19:06:17,270 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-04 19:06:17,272 - INFO - All models loaded. API is ready to serve requests.
+2026-11-04 19:07:16,972 - INFO - parse_resume_file: Parsing file: CV Vraj.pdf
+2026-11-04 19:07:17,102 - INFO - parse_resume_file: Extracted 3851 chars from CV Vraj.pdf
+2026-11-04 19:07:17,102 - INFO - Parsed  'CV Vraj.pdf': 3851 chars extracted
+2026-11-04 19:07:23,730 - INFO - Groq parsed summary: 'self-disciplined, energetic and result oriented young professional seeking a position where I can co'
+2026-11-04 19:07:23,730 - INFO - Groq parsed skills count: 35
+2026-11-04 19:07:23,730 - INFO - Groq parsed experience count: 1
+2026-11-04 19:07:26,745 - INFO - Saved analysis fro user 89eaea93-7fe5-4ad0-9062-5c30e8f4fe2a: 10
+2026-11-04 19:11:02,642 - INFO - parse_resume_file: Parsing file: CV Vraj.pdf
+2026-11-04 19:11:02,788 - INFO - parse_resume_file: Extracted 3851 chars from CV Vraj.pdf
+2026-11-04 19:11:02,789 - INFO - Parsed  'CV Vraj.pdf': 3851 chars extracted
+2026-11-04 19:11:09,299 - INFO - Groq parsed summary: 'self-disciplined, energetic and result oriented young professional seeking a position where I can co'
+2026-11-04 19:11:09,300 - INFO - Groq parsed skills count: 36
+2026-11-04 19:11:09,300 - INFO - Groq parsed experience count: 1
+2026-11-04 19:11:15,474 - INFO - Saved analysis fro user 89eaea93-7fe5-4ad0-9062-5c30e8f4fe2a: 11
+2026-11-04 19:12:32,289 - INFO - parse_resume_file: Parsing file: Vraj_Resume.pdf
+2026-11-04 19:12:32,354 - INFO - parse_resume_file: Extracted 3787 chars from Vraj_Resume.pdf
+2026-11-04 19:12:32,354 - INFO - Parsed  'Vraj_Resume.pdf': 3787 chars extracted
+2026-11-04 19:12:39,480 - INFO - Groq parsed summary: 'Software Engineering student with experience in full-stack web development, Java, Python, C++, SQL, '
+2026-11-04 19:12:39,480 - INFO - Groq parsed skills count: 33
+2026-11-04 19:12:39,480 - INFO - Groq parsed experience count: 1
+2026-11-04 19:12:50,568 - INFO - Saved analysis fro user 89eaea93-7fe5-4ad0-9062-5c30e8f4fe2a: 12
+2026-11-04 19:42:15,323 - INFO - Shutting down the api!!
+2026-11-04 19:42:15,893 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-04 19:42:15,893 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-04 19:42:17,754 - INFO - Loaded en_core_web_md
+2026-11-04 19:42:17,754 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-04 19:42:21,894 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-04 19:42:21,895 - INFO - All models loaded. API is ready to serve requests.
+2026-11-04 19:42:22,004 - INFO - Shutting down the api!!
+2026-11-04 19:42:22,601 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-04 19:42:22,601 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-04 19:42:24,856 - INFO - Loaded en_core_web_md
+2026-11-04 19:42:24,856 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-04 19:42:28,802 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-04 19:42:28,803 - INFO - All models loaded. API is ready to serve requests.
+2026-11-04 19:42:41,435 - INFO - Shutting down the api!!
+2026-11-04 19:42:41,842 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-04 19:42:41,842 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-04 19:42:43,734 - INFO - Loaded en_core_web_md
+2026-11-04 19:42:43,734 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-04 19:42:47,422 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-04 19:42:47,423 - INFO - All models loaded. API is ready to serve requests.
+2026-11-04 19:42:47,527 - INFO - Shutting down the api!!
+2026-11-04 19:42:47,937 - INFO - Staring ATS Reumse Analyzer API ...
+2026-11-04 19:42:47,937 - INFO - Loading spacy NLP model: en_core_web_md 
+2026-11-04 19:42:49,416 - INFO - Loaded en_core_web_md
+2026-11-04 19:42:49,416 - INFO - Loading SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-04 19:42:53,314 - INFO - Loaded SentenceTransformer: /Users/vraj/Desktop/ATS_SCORER/backend/core/models/fine_tuned_model
+2026-11-04 19:42:53,317 - INFO - All models loaded. API is ready to serve requests.
+2026-11-04 19:43:03,341 - INFO - Shutting down the api!!
+2026-11-05 15:06:01,336 - INFO - parse_resume_file: Parsing file: CV Vraj.pdf
+2026-11-05 15:06:01,471 - INFO - parse_resume_file: Extracted 3851 chars from CV Vraj.pdf
+2026-11-05 15:06:01,471 - INFO - Parsed  'CV Vraj.pdf': 3851 chars extracted
+2026-11-05 15:06:08,085 - INFO - Groq parsed summary: 'self-disciplined, energetic and result oriented young professional seeking a position where I can co'
+2026-11-05 15:06:08,086 - INFO - Groq parsed skills count: 33
+2026-11-05 15:06:08,086 - INFO - Groq parsed experience count: 1
+2026-11-05 15:06:10,969 - INFO - Saved analysis fro user 89eaea93-7fe5-4ad0-9062-5c30e8f4fe2a: 13
+2026-11-05 15:09:36,489 - INFO - parse_resume_file: Parsing file: Vraj_Resume.pdf
+2026-11-05 15:09:36,562 - INFO - parse_resume_file: Extracted 4146 chars from Vraj_Resume.pdf
+2026-11-05 15:09:36,562 - INFO - Parsed  'Vraj_Resume.pdf': 4146 chars extracted
+2026-11-05 15:09:43,734 - INFO - Groq parsed summary: 'Software Engineering student with experience in full-stack web development, Java, Python, C++, SQL, '
+2026-11-05 15:09:43,735 - INFO - Groq parsed skills count: 33
+2026-11-05 15:09:43,735 - INFO - Groq parsed experience count: 1
+2026-11-05 15:09:53,554 - INFO - Saved analysis fro user 89eaea93-7fe5-4ad0-9062-5c30e8f4fe2a: 14
+2026-11-05 15:11:07,717 - INFO - parse_resume_file: Parsing file: CV Vraj.pdf
+2026-11-05 15:11:08,247 - INFO - parse_resume_file: Extracted 3851 chars from CV Vraj.pdf
+2026-11-05 15:11:08,247 - INFO - Parsed  'CV Vraj.pdf': 3851 chars extracted
+2026-11-05 15:11:15,175 - INFO - Groq parsed summary: 'self-disciplined, energetic and result oriented young professional seeking a position where I can co'
+2026-11-05 15:11:15,175 - INFO - Groq parsed skills count: 37
+2026-11-05 15:11:15,175 - INFO - Groq parsed experience count: 1
+2026-11-05 15:11:17,149 - INFO - Saved analysis fro user 89eaea93-7fe5-4ad0-9062-5c30e8f4fe2a: 15
+2026-11-05 15:16:59,303 - INFO - Shutting down the api!!
+2026-11-05 15:17:27,199 - INFO - parse_resume_file: Parsing file: CV Vraj.pdf
+2026-11-05 15:17:27,328 - INFO - parse_resume_file: Extracted 3851 chars from CV Vraj.pdf
+2026-11-05 15:17:27,328 - INFO - Parsed  'CV Vraj.pdf': 3851 chars extracted
+2026-11-05 15:17:34,301 - INFO - Groq parsed summary: 'self-disciplined, energetic and result oriented young professional seeking a position where I can co'
+2026-11-05 15:17:34,302 - INFO - Groq parsed skills count: 33
+2026-11-05 15:17:34,302 - INFO - Groq parsed experience count: 1
+2026-11-05 15:17:36,708 - INFO - Saved analysis fro user 89eaea93-7fe5-4ad0-9062-5c30e8f4fe2a: 16
+2026-11-05 15:18:04,973 - INFO - Shutting down the api!!
+2026-11-05 15:18:25,390 - INFO - parse_resume_file: Parsing file: CV Vraj.pdf
+2026-11-05 15:18:25,517 - INFO - parse_resume_file: Extracted 3851 chars from CV Vraj.pdf
+2026-11-05 15:18:25,517 - INFO - Parsed  'CV Vraj.pdf': 3851 chars extracted
+2026-11-05 15:18:33,085 - INFO - Groq parsed summary: 'self-disciplined, energetic and result oriented young professional seeking a position where I can co'
+2026-11-05 15:18:33,085 - INFO - Groq parsed skills count: 51
+2026-11-05 15:18:33,085 - INFO - Groq parsed experience count: 1
+2026-11-05 15:18:34,912 - INFO - Saved analysis fro user 89eaea93-7fe5-4ad0-9062-5c30e8f4fe2a: 17
+2026-11-05 15:19:48,098 - INFO - Shutting down the api!!

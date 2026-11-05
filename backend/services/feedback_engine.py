@@ -3,8 +3,9 @@ Turns information already extracted from a resume into specific feedback
 Tells users what is specifically wrong in their resume
 """
 import re
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Optional
 from backend.models.schemas import IssueDetail
+from backend.services.ats_scorer import QUANTIFIED_PATTERNS
 
 ###################
 #  MAIN FUNCTION  #
@@ -18,7 +19,8 @@ def analyse_issues(
         action_verbs: List[str],
         skill_validation: Dict, 
         scores: Dict, 
-        contact_info: Optional[Dict]=None
+        contact_info: Optional[Dict]=None,
+        location_results: Optional[Dict]=None,
 ) -> List[IssueDetail]:
 
     #assigned detected with empty list and contains IssueDetail objects
@@ -32,7 +34,7 @@ def analyse_issues(
     summary      = (parsed_resume.get('professional_summary') or '').strip()  # Handle None to prevent string concatenation errors
 
     #Build a combined experience text for regex based checks that still need text
-    experience_text = '\n'.join(e.get('description', '') for e in exp_entries).strip()
+    experience_text = '\n'.join((e.get('description') or '') for e in exp_entries).strip()
 
 
     #1. missig project section - no parsed projects, projects input is empty, no project related words/phrases in full resume
@@ -81,11 +83,12 @@ def analyse_issues(
         ))
 
     #2. missing experience section - no parsed experience entries and none of a list of words
-    has_experience_signal = any(kw in resume_lower for kw in [
-        'intern', 'internship', 'employed', 'worked at', 'working at',
-        'company', 'organization', 'job', 'role', 'position', 'designation',
-        'manager', 'engineer', 'developer', 'analyst', 'consultant',
-    ])
+    #word-boundary match: a plain substring check would treat "international" as "intern"
+    has_experience_signal = bool(re.search(
+        r'\b(?:intern|internship|employed|employment|worked at|working at|'
+        r'work experience|work history|professional experience)\b',
+        resume_lower,
+    ))
 
     if not exp_entries and not has_experience_signal:
         detected.append(IssueDetail(
@@ -124,7 +127,7 @@ def analyse_issues(
         'b.tech', 'btech', 'b.e.', 'b.sc', 'bsc', 'm.tech', 'mtech', 'm.sc',
         'bachelor', 'master', 'phd', 'university', 'college',
         'institute of technology', 'cgpa', 'gpa', 'graduated', 'diploma',
-        'class of', '20', 'batch of',
+        'class of', 'batch of',
     ])
     if not edu_entries and not has_education_signal:
         detected.append(IssueDetail(
@@ -230,7 +233,7 @@ def analyse_issues(
     description_lines = [
         line.strip()
         for exp in exp_entries
-        for line in exp.get('description', '').split('\n')
+        for line in (exp.get('description') or '').split('\n')
         if line.strip()
     ]
 
@@ -270,20 +273,23 @@ def analyse_issues(
 
     #7. No Quantifiable Achievements 
     #tiggers if none of those patterns appear - +, numbers, $
-    number_pattern = r'\d+[%+]?|\$\d+'
-    has_metrics = bool(re.findall(number_pattern, experience_text)) if experience_text else False
+    #Uses the same patterns as the content score (%, $, 10K, 500+, "team of 5", "reduced ... by 40"),
+    #and looks at experience AND project descriptions, so the two checks always agree.
+    project_text = '\n'.join((p.get('description') or '') for p in proj_entries).strip()
+    achievement_text = f"{experience_text}\n{project_text}".strip()
+    has_metrics = any(re.search(p, achievement_text, re.IGNORECASE) for p in QUANTIFIED_PATTERNS)
 
-    if experience_text and not has_metrics:
+    if achievement_text and not has_metrics:
         detected.append(IssueDetail(
             issue_title="No Quantifiable Achievements Found",
             severity_level="Moderate",
             ats_impact="Medium",
             explanation=(
-                "Your experience section does not contain any measurable outcomes "
-                "(numbers, percentages, or dollar amounts). Quantified achievements "
+                "Your experience and project descriptions do not contain any measurable outcomes "
+                "(percentages, dollar amounts, counts such as '500+ users', or team sizes). Quantified achievements "
                 "make your impact concrete and are strongly preferred by recruiters."
             ),
-            where_it_appears="Experience section — bullet point content",
+            where_it_appears="Experience and project descriptions — bullet point content",
             how_to_fix=(
                 "Add numbers to at least 50% of your bullet points. "
                 "Include metrics like: users served, response time improved, "
@@ -412,6 +418,41 @@ def analyse_issues(
                 "Full-stack developer with 2+ years of experience building scalable "
                 "web applications using React, Node.js, and AWS. Passionate about "
                 "clean architecture and performance optimization."
+            ),
+        ))
+
+    #11. Full address / postal code - privacy risk. Raised only for a street address or postal code
+    #(a city in the header is normal and is not flagged).
+    if location_results and location_results.get('privacy_risk') == 'high':
+        sensitive = [
+            loc['text'] for loc in location_results.get('detected_locations', [])
+            if loc.get('type') in ('address', 'postal_code')
+        ]
+        shown = ', '.join(f"'{t}'" for t in sensitive[:3]) or 'the contact section'
+        detected.append(IssueDetail(
+            issue_title="Full Address or Postal Code Detected",
+            severity_level="High",
+            ats_impact="Medium",
+            explanation=(
+                "Your resume contains a full street address and/or postal code. ATS systems "
+                "do not need it, and it exposes personal information to everyone who sees "
+                "or stores your resume."
+            ),
+            where_it_appears=f"Found: {shown}",
+            how_to_fix=(
+                "Keep only your city and state/country in the contact header. "
+                "Provide your full address later, if an employer actually needs it."
+            ),
+            action_items=[
+                "Delete the street address and any postal / ZIP / PIN code from your resume",
+                "Keep a single 'City, State' (or 'City, Country') line in the contact header",
+                "Keep email, phone and LinkedIn as your main contact points",
+            ],
+            example_improvement=(
+                "Before:\n"
+                "12 Smith Street, Melbourne VIC 3000\n\n"
+                "After:\n"
+                "Melbourne, VIC"
             ),
         ))
 

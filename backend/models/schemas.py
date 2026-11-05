@@ -48,4 +48,5 @@ class AnalysisResponse(BaseModel):
     strengths: List[str] = []
     critical_issues: List[str] = []
     suggestions: List[str] = []
+    jd_penalty: float = 0.0  #points subtracted for missing job description keywords (0 without a JD)
     interpretation: str = ""

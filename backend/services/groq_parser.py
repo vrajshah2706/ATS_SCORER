@@ -12,7 +12,7 @@ from groq import Groq
 
 logger=logging.getLogger("ats_resume_scorer")
 
-GROQ_MODEL = "llama-3.3-70b-versatile"
+GROQ_MODEL = "openai/gpt-oss-120b"
 
 _client=None
 #Using singleton pattern - avoids calling API each time (financial loss) a single call through client is made
@@ -98,11 +98,15 @@ def _call_groq(client: Groq, system_prompt:str, user_prompt:str) -> str:
             {"role": "user", "content": user_prompt}
         ],
         temperature = 0.0,
-        max_tokens = 4096 #general resume around 1-2k tokens thus gave buffer
+        max_tokens = 8192 #reasoning models spend part of this budget on thinking, so leave plenty of room for the JSON
 
     )
 
-    return response.choices[0].message.content.strip() #surrounding whitespace removed
+    choice = response.choices[0]
+    if getattr(choice, "finish_reason", None) == "length":
+        logger.warning("Groq response was cut off (finish_reason=length) - JSON may be incomplete")
+
+    return (choice.message.content or "").strip() #surrounding whitespace removed
 
 
 #Safety check - removing markdown or explanation from groq response 
@@ -160,6 +164,10 @@ def _validate_resume_result(result: dict) -> dict:
         exp.setdefault("end_date", "")
         exp.setdefault("duration_months", 0)
         exp.setdefault("description", "")
+        #setdefault keeps an explicit null from the LLM, so turn None text fields into empty strings
+        for field in ("job_title", "company", "start_date", "end_date", "description"):
+            if exp[field] is None:
+                exp[field] = ""
         #Ensure duration_months is an int
         try:
             exp["duration_months"] = int(exp["duration_months"])
@@ -173,6 +181,11 @@ def _validate_resume_result(result: dict) -> dict:
         proj.setdefault("title", "")
         proj.setdefault("description", "")
         proj.setdefault("technologies", [])
+        for field in ("title", "description"):
+            if proj[field] is None:
+                proj[field] = ""
+        if not isinstance(proj["technologies"], list):
+            proj["technologies"] = [proj["technologies"]] if proj["technologies"] else []
 
     return result
 

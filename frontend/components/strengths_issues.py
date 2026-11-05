@@ -24,17 +24,23 @@ def display_critical_issues(analysis: Dict[str, Any]) -> None:
         st.markdown("Your resume doesn't have any urgent issues. Nice work.")
         return
 
-    #if critical issues, show
-    st.markdown("### 🚨 Critical Issues")
-    st.error("These issues should be addressed first for better ATS performance.")
-
-    for item in critical:
-        st.markdown(f"- {item}")
-        
-    #if there are additional issues in the summary that are not critical, 
-    #show them in an expandable section
+    #Everything flagged that is not critical (shown in an expandable list)
     extra = [s for s in summary if s not in critical]
+
+    if critical:
+        #Only show the red banner when something is actually critical
+        st.markdown("### 🚨 Critical Issues")
+        st.error("These issues should be addressed first for better ATS performance.")
+        for item in critical:
+            st.markdown(f"- {item}")
+    else:
+        #Issues were found, but none are critical
+        st.markdown("### ✅ No Critical Issues")
+        st.success("Nothing here will block your resume outright, but there are improvements worth making.")
+
+    #Non-critical issues: open by default when there are no critical ones, so they are not hidden
     if extra:
-        with st.expander("📋 Additional flagged items", expanded=False):
+        label = "📋 Additional flagged items" if critical else f"📋 Improvements to consider ({len(extra)})"
+        with st.expander(label, expanded=not critical):
             for item in extra:
                 st.markdown(f"- {item}")

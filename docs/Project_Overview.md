@@ -34,13 +34,13 @@ ATS Scorer evaluates a resume the way an ATS and a recruiter would, combining ru
 | Skill Validation | 15 | Are claimed skills actually demonstrated in projects or experience? |
 | ATS Compatibility | 15 | Parseability by automated systems, unusual characters, thin sections, location/privacy exposure |
 
-The five components are normalised and blended with weights (skills and keywords together carry the most weight), then adjusted with bonuses and penalties (e.g. a high share of missing job description keywords reduces the score).
+The overall score is simply the **sum of the five component scores** (their maximums add up to exactly 100), so the numbers on screen always add up. When a job description is supplied, a keyword-gap penalty of up to 15 points is subtracted if many of its keywords are missing from the resume. Grammar checking is not implemented yet, so it is left out of the Content score and the remaining Content criteria are scaled to the full 25 points, rather than giving every resume free points.
 
 ### Request flow
 
 1. **Upload and validate:** file size (max 5 MB) and true file type are checked from the file contents, not just the extension.
 2. **Text extraction:** `pdfplumber` first, `PyPDF2` as an automatic fallback; `python-docx` for Word files, including text inside tables. Hyperlinks (LinkedIn, GitHub) are recovered too.
-3. **Structured parsing:** the raw text is sent to an LLM on Groq (Llama 3.3 70B) with a strict JSON schema, returning skills, experience, projects, education, action verbs and keywords. Responses are validated, with one automatic retry if the JSON is malformed.
+3. **Structured parsing:** the raw text is sent to an LLM on Groq (`gpt-oss-120b`) with a strict JSON schema, returning skills, experience, projects, education, action verbs and keywords. Responses are validated, with one automatic retry if the JSON is malformed.
 4. **Analysis:** skill validation, optional job-description matching, privacy/location detection, and scoring (details below).
 5. **Feedback:** issues are generated with severity levels so users know what to fix first.
 6. **Response and history:** the result is returned to the UI and saved to the user's history in a non-blocking step, so a database hiccup never breaks the analysis.
@@ -59,7 +59,7 @@ The backend is organised in layers so each piece can be changed independently:
 - **Services:** file parser, Groq parser, NLP engine (spaCy + sentence transformer), scoring engine, feedback engine, report generator.
 - **Data and state:** ML models are loaded once at startup via FastAPI's lifespan hook (not per request), configuration lives in `core/config.py` and `.env`, and Supabase handles persistence.
 
-Scoring weights are kept in configuration rather than buried in logic, so the scoring policy can be tuned without rewriting code.
+Scoring maximums, tiers and thresholds live together in one module (`ats_scorer.py`), so the scoring policy can be tuned in one place.
 
 ### Project structure
 
@@ -105,18 +105,22 @@ Off the shelf embeddings are not tuned to resume–JD relevance, so I **fine-tun
 | Tool | Role |
 |---|---|
 | **Sentence-transformer (fine-tuned)** | Semantic similarity between resume and JD; semantic skill-to-project evidence matching |
-| **spaCy** (`en_core_web_md`) | Named-entity recognition to spot locations (privacy risk) and noun phrases for skills-gap analysis; falls back to the small model if the medium one is missing |
-| **Groq LLM (Llama 3.3 70B)** | Turns messy resume and JD text into structured JSON |
+| **spaCy** (`en_core_web_md`) | Named-entity recognition to count place names (privacy check) and noun phrases for skills-gap analysis; falls back to the small model if the medium one is missing |
+| **Groq LLM (`gpt-oss-120b`)** | Turns messy resume and JD text into structured JSON |
 | **RapidFuzz** | Fuzzy keyword matching with alias normalisation (e.g. `reactjs` = `react`, `k8s` = `kubernetes`) |
 | **scikit-learn** | Cosine similarity and error metrics (MAE/RMSE) used when evaluating the model in the notebooks |
 
 ### Skill validation
 
-For each skill, the app first checks for the skill directly in the project or experience text (fast, exact). If it isn't there, it falls back to embedding similarity and accepts the match above a threshold. A skill with no supporting evidence is flagged as *unvalidated*, which is the signal recruiters care about most.
+For each listed skill, the app looks for evidence in every project (title, description and technologies used) and in the experience section. It first tries a whole-word match that understands common spellings (`scikit-learn` / `sklearn`, `Node.js` / `nodejs`); very short skills such as `C` or `R` must match exactly so they cannot match ordinary letters. If that fails, it falls back to embedding similarity: the skill is compared with each sentence (all embedded in one batch) and accepted above a similarity threshold. A skill with no supporting evidence is flagged as *unvalidated*, which is the signal recruiters care about most.
 
 ### Job description matching
 
 Match % = **60% keyword overlap** (fuzzy-matched) + **40% semantic similarity**. Keywords catch exact requirements; embeddings catch related wording that keywords miss. The result also lists matched keywords, missing keywords and a skills gap.
+
+### Privacy check
+
+The resume is scanned for full street addresses and postal codes (patterns for Australian, US and Indian formats, plus labelled ZIP/PIN codes, designed not to be confused with phone numbers) and for place names (spaCy). A street address or postal code is a high privacy risk: it raises a High-severity issue and is deducted inside the ATS Compatibility score. A normal "City, State" line is left alone.
 
 ---
 
@@ -143,7 +147,7 @@ Match % = **60% keyword overlap** (fuzzy-matched) + **40% semantic similarity**.
 | Auth + DB | Supabase | JWT auth and PostgreSQL in one service |
 | Reports | Jinja2 + WeasyPrint | HTML templates rendered to PDF |
 | Model training | Google Colab (T4 GPU) | Free GPU for fine-tuning |
-| Deployment | Streamlit Cloud (frontend), Render (backend) | Separate deploys for UI and API |
+| Deployment | Streamlit Cloud (frontend); backend runs locally | The ML backend needs more memory than free hosting tiers provide, so a public backend is future work |
 | Tooling | Python, VS Code, Git/GitHub (with Git LFS), Dev Container | Version control and reproducible setup |
 
 ### API endpoints
@@ -166,14 +170,15 @@ Full application flow: [Application_Flow.pdf](Application_Flow.pdf)
 - **Evidence over keywords:** skill validation rewards candidates who demonstrate skills, not just list them.
 - **Models loaded once at startup:** avoids reloading heavy NLP models on every request.
 - **Layered services with an orchestrator:** each stage (parse, score, match, report) is isolated and testable.
-- **Graceful degradation:** PDF extraction falls back to a second library, saving history never blocks the responsem malformed LLM JSON is retried once, spaCy falls back to a smaller model.
+- **Graceful degradation:** PDF extraction falls back to a second library, saving history never blocks the response, malformed LLM JSON is retried once, spaCy falls back to a smaller model.
 - **Server-side token verification:** identity comes from a verified JWT, never from client-supplied data.
-- **Config-driven scoring:** weights and thresholds are centralised.
+- **Transparent scoring:** the overall score is the sum of its five visible components, and a check that cannot run (grammar) is excluded rather than given free points.
 
 ## 9. Limitations and Next Steps
 
 - The fine-tuning dataset is small (280 pairs); expanding and diversifying it would make the match score more reliable, especially for borderline "medium" matches.
 - Legacy `.doc` files are not supported (users are asked to convert to `.docx` or PDF).
 - Scanned or image-only PDFs need OCR, which is not yet included.
-- Grammar checking is not yet active; the scoring hooks for it are in place.
+- Grammar checking is not implemented yet; Content is scored on action verbs and quantified achievements only (scaled to 25 points), and the hooks for grammar are in place.
+- Postal-code detection covers Australian, US and Indian formats; other countries are not matched.
 - Job description files must be `.txt` or pasted text for now.

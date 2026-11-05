@@ -40,8 +40,7 @@ def _render_issue(issue: Dict[str, Any]) -> None:
         <div style="border-left:4px solid {text_color}; background-color:{bg_color};
                     padding:0.75rem 1rem; border-radius:6px; margin-bottom:0.5rem;">
             <strong style="color:{text_color};">{icon} {title}</strong>
-            <span style="color:#666; margin-left:0.5rem; font-size:0.85rem;">{impact}</span>
-        </div>
+            <span style="color:#666; margin-left:0.5rem; font-size:0.85rem;">{"ATS impact: " + impact if impact else ""}</span>        </div>
         """,
         unsafe_allow_html=True,
     )
@@ -71,6 +70,13 @@ def display_detailed_feedback(analysis: Dict[str, Any]) -> None:
     st.markdown("### 🔍 Detailed Feedback")
     st.caption(f"{len(issues)} issue(s) flagged — grouped by severity.")
 
+    #Adding Explanation so users know
+    st.caption(
+        "**Severity** is how urgently you should fix an issue (including privacy). "
+        "**ATS impact** is how much it affects automated screening. "
+        "For example, a full home address is critical for your privacy but has only a "
+        "medium effect on ATS parsing."
+    )
     #Sort and group issues by severity
     grouped = _group_by_severity(issues)
     #Render each group

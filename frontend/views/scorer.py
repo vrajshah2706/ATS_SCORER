@@ -40,7 +40,7 @@ def _read_jd(jd_file, jd_text: str) -> str:
 def _show_backend_error(exc: Exception) -> None:
 
     if isinstance(exc, requests.ConnectionError):
-        st.error("Could not reach the backend. Is `uvicorn backend.main:app` running on port 8000?")
+        st.error("Could not reach the backend. Is `uvicorn backend.main:app` running? (see the README for the port and start command)")
     elif isinstance(exc, requests.Timeout):
         st.error("The backend took too long to respond. Try a smaller resume or check the server logs.")
     elif isinstance(exc, requests.HTTPError) and exc.response is not None:
